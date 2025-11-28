@@ -1,2 +1,4 @@
-# cloud-resume-challenge
-Repository For Deploying Resume into the Cloud
+# Cloud Resume Challenge
+
+## Projects
+- [Frontend](./frontend/README.md)
