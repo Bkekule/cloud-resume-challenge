@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Resume - Renata Voss</title>
+    <style>
+      body {
+        font-family: "Georgia", serif;
+        margin: 0;
+        padding: 20px;
+        background: #f5f5f5;
+        color: #333;
+      }
+      .container {
+        max-width: 850px;
+        margin: 0 auto;
+        background: #fff;
+        border: 3px solid #2d5f5d;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+      .header {
+        background: #3d7775;
+        color: #fff;
+        text-align: center;
+        padding: 30px 20px;
+      }
+      .header h1 {
+        margin: 0;
+        font-size: 36px;
+        letter-spacing: 8px;
+        font-weight: 300;
+      }
+      .header .subtitle {
+        font-style: italic;
+        font-size: 14px;
+        margin-top: 8px;
+        letter-spacing: 2px;
+      }
+      .main {
+        display: flex;
+      }
+      .sidebar {
+        width: 35%;
+        background: #f8f8f8;
+        padding: 25px 20px;
+        box-sizing: border-box;
+      }
+      .content {
+        width: 65%;
+        padding: 25px 30px;
+        box-sizing: border-box;
+      }
+      h2 {
+        font-size: 13px;
+        letter-spacing: 2px;
+        margin: 25px 0 12px 0;
+        padding-bottom: 6px;
+        border-bottom: 1px solid #ccc;
+        text-transform: uppercase;
+      }
+      .sidebar h2:first-of-type {
+        margin-top: 0;
+      }
+      .content h2:first-of-type {
+        margin-top: 0;
+      }
+      h3 {
+        font-size: 16px;
+        margin: 18px 0 4px 0;
+        font-weight: 600;
+      }
+      .meta {
+        font-size: 12px;
+        color: #666;
+        margin: 2px 0 8px 0;
+      }
+      .contact-item {
+        margin: 6px 0;
+        font-size: 13px;
+        display: flex;
+        align-items: center;
+      }
+      .contact-item svg {
+        width: 14px;
+        height: 14px;
+        margin-left: 6px;
+        fill: #666;
+      }
+      a {
+        color: #3d7775;
+        text-decoration: none;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+      ul {
+        margin: 8px 0;
+        padding-left: 20px;
+        line-height: 1.6;
+      }
+      li {
+        margin: 8px 0;
+        font-size: 14px;
+      }
+      .highlight {
+        background: #fffacd;
+        font-weight: 600;
+      }
+      .skill-list {
+        list-style: none;
+        padding: 0;
+      }
+      .skill-list li {
+        margin: 8px 0;
+        font-size: 13px;
+        text-align: right;
+      }
+      .education-item {
+        margin: 15px 0;
+        text-align: right;
+        font-size: 13px;
+      }
+      .education-item .degree {
+        font-weight: 600;
+      }
+      @media (max-width: 768px) {
+        .main {
+          flex-direction: column;
+        }
+        .sidebar,
+        .content {
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header class="header">
+        <h1>RENATA VOSS</h1>
+        <div class="subtitle">DIRECTOR OF SOFTWARE ENGINEERING</div>
+      </header>
+
+      <div class="main">
+        <aside class="sidebar">
+          <section class="contact">
+            <h2>Contact</h2>
+            <div class="contact-item">r.voss@email.com</div>
+            <div class="contact-item">(123) 456-7890</div>
+            <div class="contact-item">San Jose, CA</div>
+            <div class="contact-item">LinkedIn</div>
+            <div class="contact-item"><a href="#">Github</a></div>
+          </section>
+
+          <section class="education">
+            <h2>Education</h2>
+            <div class="education-item">
+              <div class="degree">Bachelor of Science</div>
+              <div>Software Engineering</div>
+              <div>California Institute of Technology</div>
+              <div class="meta">2006 - 2010</div>
+              <div>Pasadena, CA</div>
+            </div>
+          </section>
+
+          <section class="skills">
+            <h2>Skills</h2>
+            <ul class="skill-list">
+              <li>JIRA</li>
+              <li>Amazon Web Services (AWS)</li>
+              <li>Jenkins</li>
+              <li>TensorFlow</li>
+              <li>Spring Boot</li>
+              <li>Apache Hadoop</li>
+              <li>IDPS</li>
+              <li>React Native</li>
+              <li>Selenium</li>
+              <li>Oracle</li>
+            </ul>
+          </section>
+        </aside>
+
+        <main class="content">
+          <section class="work-experience">
+            <h2>Work Experience</h2>
+
+            <article>
+              <h3>Director of Software Engineering</h3>
+              <div class="meta">Adobe</div>
+              <div class="meta">2019 - current / San Jose, CA</div>
+              <ul>
+                <li>
+                  Managed cross-functional team on Jira, increasing productivity
+                  velocity by 23%
+                </li>
+                <li>
+                  Integrated IDPS into systems, which decreased instances of
+                  successful socially engineered attacks to less than 1%
+                </li>
+                <li>
+                  Boosted processes through Jenkins-backed workflows that
+                  improved the quality of outcomes by a 54% margin
+                </li>
+                <li>
+                  <span class="highlight"
+                    >Achieved a 97% Net Promoter Score</span
+                  >
+                  and a 4.7 out of 5 rating from end users for error-free and
+                  products
+                </li>
+              </ul>
+            </article>
+
+            <article>
+              <h3>Senior Engineering Manager</h3>
+              <div class="meta">PayPal</div>
+              <div class="meta">2014 - 2019 / San Jose, CA</div>
+              <ul>
+                <li>
+                  Resolved app incompatibility issues with some mobile devices
+                  using AWS, reducing user-reporting incidents by 92%
+                </li>
+                <li>
+                  Incorporated agile best practices into core processes, which
+                  reduced average production cycle time by 17% across projects
+                </li>
+                <li>
+                  <span class="highlight"
+                    >Decreased mobile app density defects by 31%</span
+                  >
+                  by integrating React Native UI elements
+                </li>
+                <li>
+                  Worked within budget and timelines to deliver user-eccentric
+                  solutions and maintained a user satisfaction rating of 94%
+                  through customer feedback surveys
+                </li>
+              </ul>
+            </article>
+
+            <article>
+              <h3>Principal Software Engineer</h3>
+              <div class="meta">Intel</div>
+              <div class="meta">2010 - 2014 / Santa Clara, CA</div>
+              <ul>
+                <li>
+                  Optimized storage and dataset processing through Apache
+                  Hadoop,
+                  <span class="highlight"
+                    >resulting in a 47% increase in concurrent user
+                    capacity</span
+                  >
+                </li>
+                <li>
+                  Automated web applications testing across browsers with
+                  Selenium that shrank user-reported defects by 68%
+                </li>
+                <li>
+                  Led a team of 4 software engineers to create and upgrade
+                  databases on Oracle with a consistent 98% on-time delivery
+                  rate
+                </li>
+                <li>
+                  Implemented cloud infrastructure optimizations, which
+                  decreased monthly hosting costs by 28% and boosted system
+                  reliability
+                </li>
+              </ul>
+            </article>
+          </section>
+        </main>
+      </div>
+    </div>
+  </body>
+</html>
