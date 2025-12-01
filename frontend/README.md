@@ -1,16 +1,47 @@
-# React + Vite
+# Frontend Technical Specification
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Create a static website that serves an html resume.
 
-Currently, two official plugins are available:
+## Resume Format Considerations
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+I live in the United States and resumes in word/pdf are supposed to exclude personal information that can be used to discriminate against you such as age, gender, marital status, etc.
 
-## React Compiler
+For this purpose I will be using a [custom resume format](https://www.beamjobs.com/software-engineer-resume-builder?gclid=EAIaIQobChMInNXVqJKXkQMVEDLUAR0J6gidEAAYASAAEgLUTfD_BwE&gadid=773372297459&keyword=resume%20builder&gad_source=1&gad_campaignid=22996940283&gbraid=0AAAAAqMQP_DzrYl7OFFKmbZLHaw_bLkR3&gclid=EAIaIQobChMInNXVqJKXkQMVEDLUAR0J6gidEAAYASAAEgLUTfD_BwE).
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Reseme Format Generation
 
-## Expanding the ESLint configuration
+While I can read html, I am not very familiar with generation. I will be using Generative AI to do the heavy lifting for html and possible css generation, from which I will then manually refactor to fit my needs.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Prompt to Agent in Auto Mode:
+
+```text
+Generate the html for the attched image. Present it to me in a downloadable format.
+```
+
+Image provided to LLM:
+![](./docs/sample_resume.png)
+
+This is the [LLM generated output](./docs/nov-29-2025-auto_generated.html) which I will tweak.
+
+This is what the rendered resume looks like unaltered.
+![](./docs/rendered_unaltered_resume.png)
+
+## HTML Adjustments
+
+- Because we will be applying mobile styling to the website, we'll include the viewport meta tag so that mobile styling scales normally.
+- Well extract our styles into separate stylesheet after we have arrived at a satisfactory level with the markup.
+- We'll be using a soft tabs of two spaces for the html page.
+
+## Serve the static Website Locally
+
+This is usually accomplished by just opening the index.html file with a browser of our choice.
+
+## Image Size consideration
+
+For images intended to be used for page texturizing, we may need to to optimize to webp for acceptable sizes if the image sizes are too large (MB order)
+
+## Frontend Framework Consideration
+
+- Chose to use React because it is the most popular javascript framework
+- Chose to use Vite.js over webpack because the frontend for this application is very simple
+- Configured React Router V7 in declarative mode.
