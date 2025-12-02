@@ -1,110 +1,183 @@
-/* * {
-  box-sizing: border-box;
-  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
-} */
-
-/* html,
-body {
-  width: 100%;
-  height: 100%;
-  margin: 0px;
-  padding: 0px;
-  background-image: url("../images/backgroundtexture.jpg");
-  background-repeat: round;
-}
-
-body[location="resume"] div.header {
-  border-bottom: solid 2px rgb(0, 0, 0);
-}
-
-body[location="resume"] div.container .header .meta {
-  font-style: italic;
-}
-
 .container {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  margin: 0;
-}
+  background-color: azure;
 
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+  border-radius: 24px;
 
-body[location="resume"] div.header {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin: 20px 40px;
-}
-
-body[location="resume"] div.intro {
-  display: flex;
-  margin: 20px min(40px, calc((100% - 1100px) / 2));
-}
-
-body[location="resume"] div.main {
-  display: flex;
-  width: 1100px;
+  max-width: 1200px;
   margin: 0 auto;
-  flex-grow: 1;
+  margin-top: 80px;
+  margin-bottom: 40px;
+  padding: 20px;
+  transition: box-shadow 180ms ease, transform 180ms ease;
 }
 
-body[location="resume"] div.container .main aside {
-  background-image: url("../images/contactbackground.jpg");
-  color: lightcyan;
+.container:hover {
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12), 0 4px 14px rgba(0, 0, 0, 0.06);
 }
 
-body[location="resume"] div.container .main aside section div.contact-item a {
-  color: lightcyan;
-}
-
-body[location="resume"] aside section {
-  margin-bottom: 70px;
-  margin-right: 5px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  text-align: right;
-}
-
-body[location="resume"] aside section ul {
-  list-style-type: none;
-  padding-left: 0;
-}
-
-body[location="resume"] aside section:last-child {
-  margin-bottom: 0;
-}
-
-main {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-}
-
-main section {
-  margin-bottom: 50px;
-  margin-left: 5px;
-  display: flex;
-  flex-direction: column;
-}
-
-main section article {
-  margin: 10px 0px;
-}
-
-main section article div.meta {
-  font-style: italic;
+@media (prefers-reduced-motion: no-preference) {
+  .container:hover {
+    transform: translateY(-2px);
+  }
 }
 
 h1,
 h2,
 h3,
 h4,
-h5 {
-  margin: 0px;
+p,
+ul {
+  margin: 0;
 }
 
-h2 {
-  text-transform: uppercase;
-} */
+.container .header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 20px 40px;
+}
+
+.container .header .tagline {
+  font-style: italic;
+}
+
+.container .intro {
+  display: flex;
+}
+
+.container .main {
+  display: flex;
+  flex-direction: row;
+  margin-top: 20px;
+}
+
+.container .main aside.sidebar {
+  position: relative;
+  background: linear-gradient(
+    to left,
+    rgba(0, 150, 200, 0.15),
+    rgba(240, 255, 255, 1)
+  );
+  border-radius: 0;
+  padding-left: 16px;
+  padding-right: 16px;
+  padding-top: 40px;
+  padding-bottom: 40px;
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    black 40px,
+    black calc(100% - 40px),
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    black 40px,
+    black calc(100% - 40px),
+    transparent 100%
+  );
+}
+
+.container .main aside.sidebar::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: rgba(0, 150, 200, 0.8);
+}
+
+.container .main aside.sidebar section.contact .email::after {
+  content: "\f0e0"; /* Email icon */
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+  margin-left: 8px;
+}
+
+.container .main aside.sidebar section.contact .github::after {
+  content: "\f09b"; /* GitHub icon */
+  font-family: "Font Awesome 6 Brands";
+  margin-left: 8px;
+}
+
+.container .main aside.sidebar section.contact .linked-in::after {
+  content: "\f08c"; /* LinkedIn icon */
+  font-family: "Font Awesome 6 Brands";
+  margin-left: 8px;
+}
+
+.container .main aside.sidebar section.contact .telephone::after {
+  content: "\f095"; /* Telephone icon */
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+  margin-left: 8px;
+}
+
+.container .main aside.sidebar section.contact .location::after {
+  content: "\f3c5"; /* Location icon */
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+  margin-left: 8px;
+}
+.container .main aside.sidebar section {
+  margin-bottom: 50px;
+  display: flex;
+  flex-direction: column;
+  text-align: right;
+}
+
+.container .main aside.sidebar section article p.dates-location {
+  font-style: italic;
+}
+
+.container .main aside.sidebar section ul {
+  list-style-type: none;
+}
+
+.container .main aside.sidebar section ul li {
+  white-space: nowrap;
+}
+
+.container .main aside.content {
+  margin-left: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.container .main aside.content section {
+  margin-bottom: 30px;
+  padding-bottom: 30px;
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.container .main aside.content section:last-child {
+  border-bottom: none;
+}
+
+.container .main aside.content section.work-experience article {
+  margin-bottom: 20px;
+}
+
+.container
+  .main
+  aside.content
+  section.work-experience
+  article
+  .functional-area {
+  font-style: italic;
+}
+
+.container
+  .main
+  aside.content
+  section.work-experience
+  article
+  .duration\/location {
+  font-style: italic;
+}

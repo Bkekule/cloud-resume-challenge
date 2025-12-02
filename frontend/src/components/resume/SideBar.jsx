@@ -3,16 +3,20 @@ export default function Sidebar(props) {
     <>
       <section className="contact">
         <h2>CONTACT</h2>
-        <div className="contact-item">
+        <div className="email">
           <a href={`mailto:${props.contact.email}`}>{props.contact.email}</a>
         </div>
-        <div className="contact-item">
+        <div className="telephone">
           <a href={`tel:${props.contact.phone}`}>{props.contact.phone}</a>
         </div>
-        <div className="contact-item">{props.contact.location}</div>
+        <div className="location">
+          <a href={props.contact.location.google_url}>
+            {props.contact.location.address}
+          </a>
+        </div>
         {props.contact.links.map((link, index) => (
-          <div className="contact-item" key={index}>
-            <a href={link.link}>{link.label}</a>
+          <div className={link.platform} key={index}>
+            <a href={link.url}>{link.label}</a>
           </div>
         ))}
       </section>
@@ -23,7 +27,7 @@ export default function Sidebar(props) {
           <h3 className="degree">{props.education.degree}</h3>
           <p className="fields">{props.education.fields.join(", ")}</p>
           <p className="institution">{props.education.institution}</p>
-          <p className="meta dates-location">
+          <p className="dates-location">
             {props.education.dates} · {props.education.location}
           </p>
         </article>
@@ -50,7 +54,7 @@ export default function Sidebar(props) {
       <section className="interests-leadership">
         <h2>INTERESTS AND LEADERSHIP</h2>
         <ul className="other-list">
-          {props.intestsLeadership?.map((item, index) => (
+          {props.interestsLeadership?.map((item, index) => (
             <li key={index}>{item}</li>
           ))}
         </ul>

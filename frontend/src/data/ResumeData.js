@@ -7,19 +7,27 @@ export const resumeData = {
   },
 
   intro:
-    "I am an aspiring Full-Stack Data Engineer who thrives on self-motivation while valuing collaboration to solve complex challenges. My interests span the entire data lifecycle—from collection and ingestion to transformation, storage, and visualization of actionable insights. I have hands-on experience integrating IoT devices with AWS for remote configuration, optimizing inference pipelines in ppython, and automating workflows with Terraform and Databricks. I focus on building systems that are efficient, maintainable, and scalable, while ensuring compliance and cost optimization.",
+    "I am an aspiring Full-Stack Data Engineer who thrives on self-motivation while valuing collaboration to solve complex challenges. My interests span the entire data lifecycle—from collection and ingestion to transformation, storage, and visualization of actionable insights. I have hands-on experience integrating IoT devices with AWS for remote configuration, optimizing inference pipelines in python, and automating workflows with Terraform and Databricks. I focus on building systems that are efficient, maintainable, and scalable, while ensuring compliance and cost optimization.",
 
   sidebar: {
     contact: {
       email: "borisatud@icloud.com",
       phone: "+1 (667) 755-3864",
-      location: "Waukee, IA",
+      location: {
+        address: "Waukee, IA, USA",
+        google_url: "https://www.google.com/maps/place/Waukee,+Iowa/",
+      },
       links: [
         {
+          platform: "linked-in",
           label: "LinkedIn",
           url: "https://www.linkedin.com/in/boris-atud-thefighter",
         },
-        { label: "Github", url: "https://github.com/Bkekule" },
+        {
+          platform: "github",
+          label: "Github",
+          url: "https://github.com/Bkekule",
+        },
       ],
     },
     education: {
@@ -35,14 +43,14 @@ export const resumeData = {
       "Amazon Web Services (AWS)",
       "Databricks/Spark",
       "Terraform",
-      "CI/CD - Github Actions",
+      "CI/CD-GitHub Actions",
       "Matlab/Simulink",
     ],
     certifications: ["Cloud Resume Challenge", "Databricks Associate"],
     interestsLeadership: [
       "Habitat For Humanity",
       "Pi515",
-      "Bilingual - English/French",
+      "Bilingual—English/French",
       "Military Academy Leadership",
     ],
   },

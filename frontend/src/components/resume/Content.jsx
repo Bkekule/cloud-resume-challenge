@@ -6,8 +6,8 @@ export default function Content(props) {
         {props.workExperience?.map((job, index) => (
           <article key={index}>
             <h3>{job.title}</h3>
-            <div className="meta">{job.functionalArea}</div>
-            <div className="meta">
+            <div className="functional-area">{job.functionalArea}</div>
+            <div className="duration/location">
               {job.dates} / {job.location}
             </div>
             <ul>

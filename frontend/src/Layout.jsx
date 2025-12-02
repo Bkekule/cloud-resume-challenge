@@ -9,9 +9,9 @@ export default function Layout() {
   useEffect(() => {
     let pageName = "home";
     if (location.pathname === "/resume") {
-      const pageName = "resume";
+      pageName = "resume";
     } else if (location.pathname === "/projects") {
-      const pageName = "projects";
+      pageName = "projects";
     }
     document.body.setAttribute("location", pageName);
     return () => {
