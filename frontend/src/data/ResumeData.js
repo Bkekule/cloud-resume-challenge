@@ -3,11 +3,11 @@ export const resumeData = {
     name: "BORIS ATUD NEYE",
     specialization: "ENGINEERING FOR DATA",
     tagline:
-      "If you can clearly articulate the problem, we can find a solution to it.",
+      "If you can clearly articulate a data-bound problem, I will clearly articulate a data-driven solution to it.",
   },
 
   intro:
-    "I am an aspiring Full-Stack Data Engineer who thrives on self-motivation while valuing collaboration to solve complex challenges. My interests span the entire data lifecycle—from collection and ingestion to transformation, storage, and visualization of actionable insights. I have hands-on experience integrating IoT devices with AWS for remote configuration, optimizing inference pipelines in python, and automating workflows with Terraform and Databricks. I focus on building systems that are efficient, maintainable, and scalable, while ensuring compliance and cost optimization.",
+    "I am an aspiring Full-Stack Data Engineer who thrives on self-motivation while valueing collaboration to solve complex challenges. My interests span the entire data lifecycle—from collection and ingestion to transformation, storage, and visualization of actionable insights. I have hands-on experience integrating IoT devices with AWS for remote configuration, optimizing inference pipelines in python, and automating workflows with Terraform and Databricks. I focus on building systems that are efficient, maintainable, and scalable, while ensuring compliance and cost optimization.",
 
   sidebar: {
     contact: {
@@ -43,7 +43,7 @@ export const resumeData = {
       "Amazon Web Services (AWS)",
       "Databricks/Spark",
       "Terraform",
-      "CI/CD-GitHub Actions",
+      "CI/CD—GitHub Actions",
       "Matlab/Simulink",
     ],
     certifications: ["Cloud Resume Challenge", "Databricks Associate"],
@@ -51,7 +51,7 @@ export const resumeData = {
       "Habitat For Humanity",
       "Pi515",
       "Bilingual—English/French",
-      "Military Academy Leadership",
+      "Affiliate Academy Leadership",
     ],
   },
 
