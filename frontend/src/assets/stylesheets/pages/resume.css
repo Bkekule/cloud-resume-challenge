@@ -1,46 +1,49 @@
 @import url("css/breakpoints.css");
 
 body[location="resume"] main .container {
-  --space-1: 8px;
-  --space-2: 12px;
-  --space-3: 16px;
-  --space-4: 20px;
-  --space-5: 24px;
-  --space-6: 40px;
-  --space-7: 80px;
-  --main-max-width: 1200px;
+  --space-xs: 8px;
+  --space-sm: 12px;
+  --space-md: 16px;
+  --space-lg: 20px;
+  --space-xl: 24px;
+  --space-2xl: 40px;
+  --space-4xl: 80px;
+  --container-max: 1200px;
   --sidebar-min: 160px;
   --sidebar-ideal: 28%;
   --sidebar-max: 320px;
   --logo-font-weight: 900;
   --sidebar-divider: rgb(0 150 200 / 80%);
-  --azure-bg: azure;
+  --color-bg: azure;
   --accent: rgb(0 150 200 / 15%);
 
-  background-color: var(--azure-bg);
-  max-width: var(--main-max-width);
-  padding: var(--space-4);
+  background-color: var(--color-bg);
+  max-width: var(--container-max);
+  padding: var(--space-lg);
   box-sizing: border-box;
   border: 1px solid rgb(0 0 0 / 8%);
-  box-shadow: 0 var(--space-1) var(--space-4) rgb(0 0 0 / 50%);
-  border-radius: var(--space-5);
+  box-shadow: 0 var(--space-xs) var(--space-lg) rgb(0 0 0 / 50%);
+  border-radius: var(--space-xl);
   margin: 0 auto;
   transition: box-shadow 180ms ease, transform 180ms ease;
+  inline-size: 100%;
+
+  & h1,
+  & h2,
+  & h3,
+  & li,
+  & p {
+    overflow-wrap: anywhere;
+    word-break: normal;
+    hyphens: auto;
+  }
 
   & .header {
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
-    margin: var(--space-4) var(--space-6);
-
-    & h1 {
-      margin: 0;
-    }
-
-    & .tagline {
-      font-style: italic;
-    }
+    margin: var(--space-lg) var(--space-2xl);
   }
 
   & .intro {
@@ -50,50 +53,30 @@ body[location="resume"] main .container {
   & .main {
     display: flex;
     flex-flow: row wrap;
-    margin-top: var(--space-4);
+    margin-top: var(--space-lg);
     max-width: 100%;
-    gap: var(--space-4);
-    min-width: 0;
+    gap: var(--space-lg);
 
     & aside.sidebar {
       flex: 0 1
         clamp(var(--sidebar-min), var(--sidebar-ideal), var(--sidebar-max));
-      min-width: 0;
-      max-width: 100%;
       position: relative;
-      background: linear-gradient(to left, var(--accent), var(--azure-bg));
-      padding: var(--space-5) var(--space-3);
+      background: linear-gradient(to left, var(--accent), var(--color-bg));
+      padding: var(--space-xl) var(--space-md);
       mask-image: linear-gradient(
         to bottom,
         transparent 0%,
-        black var(--space-5),
-        black calc(100% - var(--space-5)),
+        black var(--space-xl),
+        black calc(100% - var(--space-xl)),
         transparent 100%
       );
-
-      @supports (-webkit-mask-image: linear-gradient(black, transparent)) {
-        mask-image: linear-gradient(
-          to bottom,
-          transparent 0%,
-          black var(--space-5),
-          black calc(100% - var(--space-5)),
-          transparent 100%
-        );
-      }
-
-      & section ul li {
-        white-space: normal;
-        overflow-wrap: anywhere;
-        word-break: normal;
-      }
 
       &::after {
         content: "";
         position: absolute;
-        top: 0;
-        right: 0;
-        width: 4px;
-        height: 100%;
+        inset: 0 0 0 auto;
+        inline-size: 4px;
+        block-size: 100%;
         background: var(--sidebar-divider);
       }
 
@@ -103,93 +86,18 @@ body[location="resume"] main .container {
         flex-direction: column;
         text-align: right;
         align-items: flex-end;
-
-        & ul {
-          list-style: none;
-          margin: 0;
-        }
-
-        & h2 {
-          white-space: normal;
-          overflow-wrap: anywhere;
-          word-break: normal;
-          hyphens: auto;
-          display: block;
-          min-width: 0;
-          width: 100%;
-          text-align: right;
-          margin: 0;
-          line-height: 1.25;
-
-          & li {
-            white-space: normal;
-            overflow-wrap: anywhere;
-            word-break: normal;
-          }
-        }
-
-        & article {
-          margin: 0;
-
-          & h3 {
-            margin: 0;
-          }
-
-          & p {
-            margin: 0;
-          }
-
-          & p.dates-location {
-            font-style: italic;
-          }
-        }
-      }
-
-      & section.contact {
-        & .email::after {
-          content: "\f0e0";
-          font-family: "Font Awesome 6 Free", sans-serif;
-          font-weight: var(--logo-font-weight);
-          margin-left: var(--space-1);
-        }
-
-        & .github::after {
-          content: "\f09b";
-          font-family: "Font Awesome 6 Brands", sans-serif;
-          font-weight: var(--logo-font-weight);
-          margin-left: var(--space-1);
-        }
-
-        & .linked-in::after {
-          content: "\f08c";
-          font-family: "Font Awesome 6 Brands", sans-serif;
-          font-weight: var(--logo-font-weight);
-          margin-left: var(--space-1);
-        }
-
-        & .telephone::after {
-          content: "\f095";
-          font-family: "Font Awesome 6 Free", sans-serif;
-          font-weight: var(--logo-font-weight);
-          margin-left: var(--space-1);
-        }
-
-        & .location::after {
-          content: "\f3c5";
-          font-family: "Font Awesome 6 Free", sans-serif;
-          font-weight: var(--logo-font-weight);
-          margin-left: var(--space-1);
-        }
       }
     }
 
     & aside.content {
       flex: 1 1 480px;
-      min-width: 0;
-      max-width: 100%;
       margin-left: 0;
       display: flex;
       flex-direction: column;
+      white-space: normal;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      hyphens: auto;
 
       & section {
         margin-bottom: 30px;
@@ -197,25 +105,6 @@ body[location="resume"] main .container {
         display: flex;
         flex-direction: column;
         border-bottom: 1px solid rgb(0 0 0 / 15%);
-
-        & h2 {
-          margin: 0;
-        }
-
-        & article {
-          & .functional-area {
-            font-style: italic;
-          }
-
-          /* stylelint-disable-next-line selector-class-pattern */
-          & .duration\/location {
-            font-style: italic;
-          }
-
-          & h3 {
-            margin: 0;
-          }
-        }
       }
 
       & section:last-child {
@@ -230,11 +119,11 @@ body[location="resume"] main .container {
 
       & aside.sidebar {
         flex: 1 1 100%;
-        padding: var(--space-4) var(--space-3);
+        padding: var(--space-lg) var(--space-md);
         mask-image: linear-gradient(
           to bottom,
           transparent 0%,
-          black var(--space-5),
+          black var(--space-xl),
           black 100%
         );
 
@@ -260,4 +149,108 @@ body[location="resume"] main .container:hover {
   body[location="resume"] main .container:hover {
     transform: translateY(-2px);
   }
+}
+
+body[location="resume"] main .container .main,
+body[location="resume"] main .container .main > aside.sidebar,
+body[location="resume"] main .container .main > aside.content {
+  min-width: 0;
+  max-width: 100%;
+}
+
+body[location="resume"] main .container .main aside.sidebar section ul {
+  list-style: none;
+  margin: 0;
+
+  & li {
+    white-space: normal;
+  }
+}
+
+body[location="resume"] main .container .main aside.sidebar section h2 {
+  white-space: normal;
+  display: block;
+  min-width: 0;
+  max-width: 100%;
+  text-align: right;
+  margin: 0;
+}
+
+body[location="resume"] main .container .main aside.sidebar section.contact {
+  & .email::after {
+    content: "\f0e0";
+    font-family: "Font Awesome 6 Free", sans-serif;
+    font-weight: var(--logo-font-weight);
+    margin-left: var(--space-xs);
+  }
+
+  & .github::after {
+    content: "\f09b";
+    font-family: "Font Awesome 6 Brands", sans-serif;
+    font-weight: var(--logo-font-weight);
+    margin-left: var(--space-xs);
+  }
+
+  & .linked-in::after {
+    content: "\f08c";
+    font-family: "Font Awesome 6 Brands", sans-serif;
+    font-weight: var(--logo-font-weight);
+    margin-left: var(--space-xs);
+  }
+
+  & .telephone::after {
+    content: "\f095";
+    font-family: "Font Awesome 6 Free", sans-serif;
+    font-weight: var(--logo-font-weight);
+    margin-left: var(--space-xs);
+  }
+
+  & .location::after {
+    content: "\f3c5";
+    font-family: "Font Awesome 6 Free", sans-serif;
+    font-weight: var(--logo-font-weight);
+    margin-left: var(--space-xs);
+  }
+}
+
+body[location="resume"] main .container .header h1,
+body[location="resume"] main .container .main aside.sidebar section article,
+body[location="resume"] main .container .main aside.sidebar section article h3,
+body[location="resume"] main .container .main aside.sidebar section article p,
+body[location="resume"] main .container .main aside.content section h2,
+body[location="resume"] main .container .main aside.content section article h3 {
+  margin: 0;
+}
+
+body[location="resume"]
+  main
+  .container
+  .header
+  .tagline,
+body[location="resume"]
+  main
+  .container
+  .main
+  aside.content
+  section
+  article
+  .functional-area,
+body[location="resume"]
+  main
+  .container
+  .main
+  aside.content
+  section
+  article
+  /* stylelint-disable-next-line selector-class-pattern */
+  .duration\/location,
+body[location="resume"]
+  main
+  .container
+  .main
+  aside.sidebar
+  section
+  article
+  p.dates-location {
+  font-style: italic;
 }

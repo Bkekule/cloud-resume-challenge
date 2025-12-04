@@ -3,7 +3,7 @@ export const resumeData = {
     name: "BORIS ATUD NEYE",
     specialization: "ENGINEERING FOR DATA",
     tagline:
-      "If you can clearly articulate a data-bound problem, I will clearly articulate a data-driven solution to it.",
+      "If you can clearly articulate a data-bound problem, I can clearly articulate a data-driven solution to it.",
   },
 
   intro:
