@@ -59,7 +59,7 @@ export const resumeData = {
     {
       title: "Data Engineer",
       functionalArea:
-        "Constructions and Road Building Automation, John Deere ISG",
+        "Construction and Road Building Automation, John Deere ISG",
       dates: "Sep 2024 - current",
       location: "Urbandale, IA",
       accomplishments: [
