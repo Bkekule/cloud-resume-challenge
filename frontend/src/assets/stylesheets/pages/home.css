@@ -1,0 +1,20 @@
+@import url("css/breakpoints.css");
+
+body[location="home"] main .container {
+  & img.profile-picture {
+    min-width: 0;
+    max-width: 300px;
+    max-height: 300px;
+    border-radius: 50%;
+    align-self: center;
+  }
+}
+
+@media (--phone) {
+  body[location="home"] main .container img.profile-picture {
+    padding: 0;
+    max-width: 300px;
+    max-height: 300px;
+    align-self: center;
+  }
+}

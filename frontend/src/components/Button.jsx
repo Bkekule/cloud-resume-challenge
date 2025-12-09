@@ -2,7 +2,6 @@ export default function Button(props) {
   return (
     <button
       type={props.type}
-      disabled={props.disabled}
       onClick={props.onClick}
       aria-label={props.ariaLabel}
       aria-controls={props.ariaControls}

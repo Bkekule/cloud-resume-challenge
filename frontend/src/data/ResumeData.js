@@ -105,3 +105,5 @@ export const resumeData = {
     "Cotton Color and Leaf Quantification with Multispectral Camera (2024)",
   ],
 };
+
+export default resumeData;

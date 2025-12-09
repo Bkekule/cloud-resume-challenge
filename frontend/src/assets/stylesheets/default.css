@@ -1,4 +1,8 @@
+@import url("css/breakpoints.css");
+
 body {
+  --text-bg: azure;
+
   background-image: url("imgs/sonic-silver-solid-color-background.jpg");
   background-repeat: round;
 }
@@ -18,6 +22,7 @@ main {
   -moz-osx-font-smoothing: grayscale;
   display: flex;
   flex-direction: column;
+  margin-top: var(--header-height);
 
   & a {
     color: #06c;
@@ -66,5 +71,67 @@ main {
 
   & a:hover {
     color: #535bf2;
+  }
+
+  & .container {
+    --space-xs: 8px;
+    --space-lg: 20px;
+    --space-xl: 24px;
+    --container-max: 1200px;
+
+    background-color: var(--text-bg);
+    max-width: var(--container-max);
+    padding: var(--space-lg);
+    box-sizing: border-box;
+    border: 1px solid rgb(0 0 0 / 8%);
+    box-shadow: 0 var(--space-xs) var(--space-lg) rgb(0 0 0 / 50%);
+    border-radius: var(--space-xl);
+    margin: var(--space-lg) auto 0;
+    transition: box-shadow 180ms ease, transform 180ms ease;
+    inline-size: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+
+    & .main {
+      min-width: 0;
+      max-width: 100%;
+    }
+  }
+
+  & h1,
+  & h2,
+  & h3,
+  & li,
+  & p {
+    overflow-wrap: anywhere;
+    word-break: normal;
+    hyphens: auto;
+    margin: 0;
+  }
+
+  & article {
+    margin: 0;
+  }
+}
+
+@media (--phone) {
+  body {
+    margin: 0;
+    background-image: none;
+    background-color: var(--text-bg);
+  }
+
+  body main .container {
+    margin: 0;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    display: flex;
+    flex-direction: column;
+
+    & article {
+      margin: 0;
+    }
   }
 }

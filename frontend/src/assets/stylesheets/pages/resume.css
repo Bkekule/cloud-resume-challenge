@@ -1,63 +1,26 @@
 @import url("css/breakpoints.css");
 
 body[location="resume"] main .container {
-  --space-xs: 8px;
   --space-sm: 12px;
   --space-md: 16px;
-  --space-lg: 20px;
-  --space-xl: 24px;
   --space-2xl: 40px;
   --space-4xl: 80px;
-  --container-max: 1200px;
   --sidebar-min: 160px;
   --sidebar-ideal: 28%;
   --sidebar-max: 320px;
   --logo-font-weight: 900;
   --sidebar-divider: rgb(0 150 200 / 80%);
-  --color-bg: azure;
   --accent: rgb(0 150 200 / 15%);
 
-  background-color: var(--color-bg);
-  max-width: var(--container-max);
-  padding: var(--space-lg);
-  box-sizing: border-box;
-  border: 1px solid rgb(0 0 0 / 8%);
-  box-shadow: 0 var(--space-xs) var(--space-lg) rgb(0 0 0 / 50%);
-  border-radius: var(--space-xl);
-  margin: var(--header-height) auto 0;
-  transition: box-shadow 180ms ease, transform 180ms ease;
-  inline-size: 100%;
-  position: relative;
-
-  & .main,
   & .main > aside.sidebar,
   & .main > aside.content {
     min-width: 0;
     max-width: 100%;
   }
 
-  & h1,
-  & h2,
-  & h3,
-  & li,
-  & p {
-    overflow-wrap: anywhere;
-    word-break: normal;
-    hyphens: auto;
-  }
-
   & .header .title-row h1 {
     font-size: 2.8em;
     line-height: 1.1;
-  }
-
-  & .header .title-row h1,
-  & .main aside.sidebar section article,
-  & .main aside.sidebar section article h3,
-  & .main aside.sidebar section article p,
-  & .main aside.content section h2,
-  & .main aside.content section article h3 {
-    margin: 0;
   }
 
   & .header .title-row .tagline,
@@ -207,17 +170,8 @@ body[location="resume"] main .container {
 }
 
 @media (--phone) {
-  body[location="resume"] {
-    margin: 0;
-  }
-
-  body[location="resume"] main .container {
-    border: none;
-    border-radius: 0;
-
-    & .intro {
-      text-align: center;
-    }
+  body[location="resume"] main .container .intro {
+    text-align: center;
   }
 
   body[location="resume"] main .container .main {

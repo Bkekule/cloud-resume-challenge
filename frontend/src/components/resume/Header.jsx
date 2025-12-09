@@ -10,7 +10,7 @@ export default function Header(props) {
         aria-expanded={props.sidebarOpen}
         onClick={props.handleSidebar}
         ref={props.sidebarButtonRef}
-        icon="☰"
+        icon={<span>☰</span>}
       />
 
       <div className="title-row">

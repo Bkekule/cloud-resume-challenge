@@ -4,7 +4,7 @@ import Intro from "comps/resume/Intro.jsx";
 import SideBar from "comps/resume/SideBar.jsx";
 import Content from "comps/resume/Content.jsx";
 import "css/pages/resume.css";
-import { resumeData } from "data/ResumeData.js";
+import resumeData from "data/ResumeData.js";
 import { createFocusTrap } from "focus-trap";
 import { useEffect, useRef, useState } from "react";
 
@@ -92,17 +92,17 @@ export default function ResumePage() {
           className="sidebar"
           id={sidebarID}
           aria-hidden={!sidebarOpen}
+          hidden={sidebarOpen}
           tabIndex="-1"
           ref={sidebarRef}
         >
           {sidebarOpen && (
             <Button
               type="button"
-              disabled={false}
               onClick={handleSidebar}
               aria-label="Close About"
               className="close-sidebar"
-              icon="✕"
+              icon={<span>✕</span>}
             />
           )}
           <SideBar {...resumeData.sidebar} />
