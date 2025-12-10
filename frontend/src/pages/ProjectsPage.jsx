@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import ProjectItem from "comps/projects/ProjectItem.jsx";
+import ProjectItem from "comps/projects/ProjectItem";
 import "css/pages/projects.css";
-import projectsData from "data/ProjectData.js";
+import projectsData from "data/projectsData";
 
 function useMediaQuery(query) {
   const [matches, setMatches] = useState(
@@ -21,7 +21,7 @@ function useMediaQuery(query) {
 }
 
 export default function ProjectsPage() {
-  const isPhone = useMediaQuery("(max-width: 768px)"); // The fact that I am hardcosing these breakpoints in two separate locations(here and in the css), bothers me
+  const isPhone = useMediaQuery("(max-width: 768px)"); // The fact that I am hardcoding these breakpoints in two separate locations(here and in the css) bothers me
 
   return (
     <div className="container">

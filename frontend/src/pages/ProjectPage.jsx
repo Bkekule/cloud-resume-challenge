@@ -1,11 +1,12 @@
 import { useParams, NavLink } from "react-router-dom";
 import "css/pages/projects.css";
-import projectsData from "data/ProjectData.js";
+import projectsData from "data/projectsData";
 import { ChevronLeft } from "lucide-react";
 import { useEffect } from "react";
 
 export default function ProjectPage() {
   const { handle } = useParams();
+  const project = projectsData.find((project) => project.handle === handle);
   useEffect(() => {
     document.body.setAttribute("location", "projects");
   }, []);
@@ -14,9 +15,11 @@ export default function ProjectPage() {
       <NavLink to="/projects">
         <ChevronLeft /> Back To Projects
       </NavLink>
-      <h2>
-        {projectsData.find((project) => project.handle === handle)?.title}
-      </h2>
+      <h2>{project?.title}</h2>
+      <div
+        className="markdown"
+        dangerouslySetInnerHTML={{ __html: project?.body_html }}
+      />
     </div>
   );
 }

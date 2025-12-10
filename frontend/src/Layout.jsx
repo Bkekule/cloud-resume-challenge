@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import "css/default.css";
-import Header from "comps/Header.jsx";
+import Header from "comps/Header";
 import { Outlet, useLocation } from "react-router-dom";
 
 export default function Layout() {

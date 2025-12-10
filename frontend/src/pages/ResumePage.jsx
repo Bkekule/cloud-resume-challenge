@@ -1,10 +1,10 @@
 import Button from "comps/Button";
-import ResumeHeader from "comps/resume/Header.jsx";
-import Intro from "comps/resume/Intro.jsx";
-import SideBar from "comps/resume/SideBar.jsx";
-import Content from "comps/resume/Content.jsx";
+import ResumeHeader from "comps/resume/Header";
+import Intro from "comps/resume/Intro";
+import SideBar from "comps/resume/SideBar";
+import Content from "comps/resume/Content";
 import "css/pages/resume.css";
-import resumeData from "data/ResumeData.js";
+import resumeData from "data/ResumeData";
 import { createFocusTrap } from "focus-trap";
 import { useEffect, useRef, useState } from "react";
 
