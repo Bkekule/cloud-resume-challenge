@@ -1,12 +1,21 @@
 @import url("css/breakpoints.css");
 
-body[location="projects"] main [class^="container "] {
+body[location="posts"] main [class^="container "] {
   & h2 {
     margin: 1rem;
   }
+
+  & a {
+    display: flex;
+    align-items: center;
+  }
+
+  & a:hover {
+    text-decoration: underline;
+  }
 }
 
-body[location="projects"] main .container {
+body[location="posts"] main .container {
   & article {
     display: grid;
     grid-template-columns: 2fr 1fr;
@@ -29,7 +38,7 @@ body[location="projects"] main .container {
 }
 
 @media (--phone) {
-  body[location="projects"] main .container {
+  body[location="posts"] main .container {
     padding: 0;
 
     & article {

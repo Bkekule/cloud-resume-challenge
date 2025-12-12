@@ -1,22 +1,45 @@
 import json
-import markdown
 from pathlib import Path
 
+import markdown
+import frontmatter
 from invoke.tasks import task
 
 project_folder: Path = Path(__file__).resolve().parent.parent
 
-@task
 def convert_markdown_to_html(
-    c,
-    input_file: Path = project_folder / "backend" / "projects.json", 
-    output_file: Path = project_folder / "frontend" / "src" / "data" / "projectsData.json",
+    input_dir: Path, 
+    output_file: Path,
+    search_location: str,
 ) -> None:
-    with open(input_file, 'r') as f:
-        data = json.load(f)
     
-    for project in data:
-        project['body_html'] = markdown.markdown(project.pop('body'))
+    projects = []
+    
+    for md_file in Path(input_dir).glob(search_location):
+        post = frontmatter.load(str(md_file))
+        
+        project = dict(post.metadata)
+        project['body_html'] = markdown.markdown(post.content)
+        projects.append(project)
     
     with open(output_file, 'w') as f:
-        json.dump(data, f, indent=2)
+        json.dump(projects, f, indent=2)
+
+@task
+def convert_projects_markdown_to_html(
+    c,
+    input_dir: Path = project_folder / "backend" / "data" / "projects", 
+    output_file: Path = project_folder / "frontend" / "src" / "data" / "projectsData.json",
+    search_location: str = "*.md",
+) -> None:
+    convert_markdown_to_html(input_dir, output_file, search_location)
+
+
+@task
+def convert_blogs_markdown_to_html(
+    c,
+    input_dir: Path = project_folder / "backend" / "data" / "blog", 
+    output_file: Path = project_folder / "frontend" / "src" / "data" / "blogsData.json",
+    search_location: str = "**/*.md",
+) -> None:
+    convert_markdown_to_html(input_dir, output_file, search_location)

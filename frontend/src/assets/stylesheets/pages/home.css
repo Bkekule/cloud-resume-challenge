@@ -7,6 +7,26 @@ body[location="home"] main .container {
     max-height: 300px;
     border-radius: 50%;
     align-self: center;
+    margin-bottom: 2rem;
+  }
+
+  & h2 {
+    text-align: center;
+    margin: 1rem;
+  }
+
+  & nav {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    & a {
+      color: black;
+    }
+
+    & :hover {
+      text-decoration: underline;
+    }
   }
 }
 

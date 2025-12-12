@@ -6,6 +6,7 @@ import HomePage from "pages/HomePage";
 import ProjectsPage from "pages/ProjectsPage";
 import ProjectPage from "pages/ProjectPage";
 import ResumePage from "pages/ResumePage";
+import BlogPage from "pages/BlogPage";
 
 createRoot(document.querySelector("main")).render(
   <StrictMode>
@@ -13,6 +14,7 @@ createRoot(document.querySelector("main")).render(
       <Routes>
         <Route element={<Layout />}>
           <Route path="/" element={<HomePage />} />
+          <Route path="/home/blog/:date/:handle" element={<BlogPage />} />
           <Route path="/resume" element={<ResumePage />} />
           <Route path="/projects" element={<ProjectsPage />} />
           <Route path="/projects/:handle" element={<ProjectPage />} />
