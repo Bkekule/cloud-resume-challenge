@@ -92,7 +92,6 @@ export default function ResumePage() {
           className="sidebar"
           id={sidebarID}
           aria-hidden={!sidebarOpen}
-          inert={!sidebarOpen}
           hidden={sidebarOpen}
           tabIndex="-1"
           ref={sidebarRef}

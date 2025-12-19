@@ -4,19 +4,25 @@ export default function Sidebar(props) {
       <section className="contact">
         <h2>CONTACT</h2>
         <div className="email">
-          <a href={`mailto:${props.contact.email}`}>{props.contact.email}</a>
+          <a target="_blank" href={`mailto:${props.contact.email}`}>
+            {props.contact.email}
+          </a>
         </div>
         <div className="telephone">
-          <a href={`tel:${props.contact.phone}`}>{props.contact.phone}</a>
+          <a target="_blank" href={`tel:${props.contact.phone}`}>
+            {props.contact.phone}
+          </a>
         </div>
         <div className="location">
-          <a href={props.contact.location.google_url}>
+          <a target="_blank" href={props.contact.location.google_url}>
             {props.contact.location.address}
           </a>
         </div>
         {props.contact.links.map((link, index) => (
           <div className={link.platform} key={index}>
-            <a href={link.url}>{link.label}</a>
+            <a target="_blank" href={link.url}>
+              {link.label}
+            </a>
           </div>
         ))}
       </section>

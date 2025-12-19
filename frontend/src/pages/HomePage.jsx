@@ -4,6 +4,9 @@ import PostItem from "comps/home/PostItem";
 import blogsData from "data/blogsData";
 
 export default function HomePage() {
+  const sortedBlogsData = [...blogsData].sort(
+    (a, b) => new Date(b.date) - new Date(a.date)
+  );
   return (
     <div className="container">
       <img
@@ -12,7 +15,7 @@ export default function HomePage() {
         title="Boris Profile Picture"
       />
       <h2>Recent Posts</h2>
-      {blogsData.map((post) => (
+      {sortedBlogsData.map((post) => (
         <PostItem key={post.handle} {...post} />
       ))}
     </div>
