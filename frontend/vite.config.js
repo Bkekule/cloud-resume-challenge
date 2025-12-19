@@ -14,4 +14,10 @@ export default defineConfig({
       pages: path.resolve(__dirname, "src/pages"),
     },
   },
+  server: {
+    headers: { "X-Content-Type-Options": "nosniff" },
+  },
+  preview: {
+    headers: { "X-Content-Type-Options": "nosniff" },
+  },
 });

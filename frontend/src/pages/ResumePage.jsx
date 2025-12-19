@@ -92,6 +92,7 @@ export default function ResumePage() {
           className="sidebar"
           id={sidebarID}
           aria-hidden={!sidebarOpen}
+          inert={!sidebarOpen}
           hidden={sidebarOpen}
           tabIndex="-1"
           ref={sidebarRef}
@@ -100,7 +101,7 @@ export default function ResumePage() {
             <Button
               type="button"
               onClick={handleSidebar}
-              aria-label="Close About"
+              aria-label="Close sidebar"
               className="close-sidebar"
               icon={<span>✕</span>}
             />

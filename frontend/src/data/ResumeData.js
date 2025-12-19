@@ -1,7 +1,7 @@
 export const resumeData = {
   header: {
     name: "BORIS ATUD NEYE",
-    specialization: "ENGINEERING FOR DATA",
+    specialization: "ENGINEERING FOR AND FROM DATA",
     tagline:
       "If you can clearly articulate a data-bound problem, I can clearly articulate a data-driven solution to it.",
   },
@@ -76,7 +76,7 @@ export const resumeData = {
       dates: "Dec 2023 - August 2024",
       location: "Urbandale, IA",
       accomplishments: [
-        "Worked with SONY supplier engineering team to identify root causes of sensor assembly variations in PDP development, driving standardization of sourcing practices and influencing best practices for subsequent projects.",
+        "Collaborated with SONY supplier engineering team to identify root causes of sensor assembly variations in PDP development, driving standardization of sourcing practices and influencing best practices for subsequent projects.",
         "Developed software to store and retrieve sensor calibration on camera EEPROM, enabling seamless integration with image controller runtime services.",
         "Created a precision calibration bracket for camera sensors using CAD and additive manufacturing, standardizing the calibration workflow for repeatability and accuracy.",
       ],

@@ -1,4 +1,4 @@
-@import url("css/breakpoints.css");
+@import url("../breakpoints.css");
 
 body[location="resume"] main .container {
   --space-sm: 12px;
@@ -70,7 +70,7 @@ body[location="resume"] main .container {
       flex: 0 1
         clamp(var(--sidebar-min), var(--sidebar-ideal), var(--sidebar-max));
       position: relative;
-      background: linear-gradient(to left, var(--accent), var(--color-bg));
+      background: linear-gradient(to left, var(--accent), var(--text-bg));
       padding: var(--space-xl) var(--space-md);
       mask-image: linear-gradient(
         to bottom,
@@ -207,7 +207,7 @@ body[location="resume"] main .container {
     position: absolute;
     inset: 0;
     z-index: 1000;
-    background: var(--color-bg);
+    background: var(--text-bg);
     overflow-y: auto;
     padding: var(--space-xl) var(--space-md);
     mask-image: none;

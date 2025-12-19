@@ -11,6 +11,7 @@ export default function Header(props) {
         onClick={props.handleSidebar}
         ref={props.sidebarButtonRef}
         icon={<span>☰</span>}
+        ariaLabel="Open sidebar"
       />
 
       <div className="title-row">

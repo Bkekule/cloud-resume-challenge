@@ -1,4 +1,4 @@
-@import url("css/breakpoints.css");
+@import url("../breakpoints.css");
 
 body[location="home"] main .container {
   & img.profile-picture {
