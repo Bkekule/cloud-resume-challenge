@@ -3,16 +3,18 @@ import Button from "comps/Button";
 export default function Header(props) {
   return (
     <div className="header">
-      <Button
-        className="open-sidebar"
-        type="button"
-        aria-controls={props.sidebarID}
-        aria-expanded={props.sidebarOpen}
-        onClick={props.handleSidebar}
-        ref={props.sidebarButtonRef}
-        icon={<span>☰</span>}
-        ariaLabel="Open sidebar"
-      />
+      {props.showSidebarButton && (
+        <Button
+          className="open-sidebar"
+          type="button"
+          aria-controls={props.sidebarID}
+          aria-expanded={props.sidebarOpen}
+          onClick={props.handleSidebar}
+          ref={props.sidebarButtonRef}
+          icon={<span>☰</span>}
+          ariaLabel="Open sidebar"
+        />
+      )}
 
       <div className="title-row">
         <h1>{props.name}</h1>

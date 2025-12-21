@@ -1,3 +1,4 @@
+import { useMediaQuery } from "comps/Utils";
 import Button from "comps/Button";
 import ResumeHeader from "comps/resume/Header";
 import Intro from "comps/resume/Intro";
@@ -9,10 +10,12 @@ import { createFocusTrap } from "focus-trap";
 import { useEffect, useRef, useState } from "react";
 
 export default function ResumePage() {
+  const isPhone = useMediaQuery("(max-width: 768px)");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const sidebarRef = useRef(null);
   const sidebarButtonRef = useRef(null);
   const trap = useRef(null);
+
   const tabAbleSelectors = [
     "a[href]",
     "area[href]",
@@ -23,34 +26,46 @@ export default function ResumePage() {
     '[tabindex]:not([tabindex="-1"])',
   ];
 
+  // Handle body overflow when sidebar is open on phone. Useful in this case because of the Layout
   useEffect(() => {
-    document.body.style.overflow = sidebarOpen ? "hidden" : "";
+    if (isPhone && sidebarOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
     return () => {
       document.body.style.overflow = "";
     };
-  }, [sidebarOpen]);
+  }, [isPhone, sidebarOpen]);
 
   useEffect(() => {
     const onKeyDown = (e) => {
       if (e.key !== "Escape") return;
 
-      if (sidebarOpen) {
+      const active = document.activeElement;
+      if (active && active !== document.body && active?.blur) {
+        active.blur();
+        return;
+      }
+
+      if (isPhone && sidebarOpen) {
         setSidebarOpen(false);
-      } else {
-        // This part can be moved to the layout if we can make it not depend on the sidebarOpen but mostly on the current focus area
-        const active = document.activeElement;
-        if (active?.blur) active.blur();
       }
     };
 
     document.addEventListener("keydown", onKeyDown);
     return () => document.removeEventListener("keydown", onKeyDown);
-  }, [sidebarOpen]);
+  }, [isPhone, sidebarOpen]);
 
   useEffect(() => {
-    if (!sidebarRef.current) return;
+    if (!isPhone) return;
 
-    if (!trap.current) {
+    if (trap.current) {
+      trap.current.deactivate();
+      trap.current = null;
+    }
+
+    if (sidebarOpen && sidebarRef.current) {
       trap.current = createFocusTrap(sidebarRef.current, {
         initialFocus: () => {
           const tabAbleElt = sidebarRef.current.querySelector(
@@ -60,7 +75,9 @@ export default function ResumePage() {
         },
         returnFocusOnDeactivate: true,
         setReturnFocus: () => sidebarButtonRef.current,
+        escapeDeactivates: false, // We handle escapes manually above
       });
+      trap.current.activate();
     }
 
     return () => {
@@ -69,24 +86,22 @@ export default function ResumePage() {
         trap.current = null;
       }
     };
-  }, []);
+  }, [isPhone, sidebarOpen]);
 
   useEffect(() => {
-    if (!trap.current) return;
-
-    if (sidebarOpen) {
-      trap.current.activate();
-    } else {
-      trap.current.deactivate();
+    if (!isPhone && sidebarOpen) {
+      setSidebarOpen(false);
     }
-  }, [sidebarOpen]);
+  }, [isPhone]);
 
   const handleSidebar = () => {
     setSidebarOpen((prev) => !prev);
   };
 
   const sidebarID = "resume-sidebar";
-  if (sidebarOpen) {
+
+  // Phone view with sidebar open - show only sidebar with close button
+  if (isPhone && sidebarOpen) {
     return (
       <div className="container">
         <div className="main sidebar-open">
@@ -111,6 +126,7 @@ export default function ResumePage() {
     );
   }
 
+  // Normal view (phone without sidebar, or larger screen)
   return (
     <div className="container">
       <ResumeHeader
@@ -119,18 +135,21 @@ export default function ResumePage() {
         sidebarOpen={sidebarOpen}
         sidebarButtonRef={sidebarButtonRef}
         sidebarID={sidebarID}
+        showSidebarButton={isPhone}
       />
       <Intro {...resumeData} />
       <div className="main">
-        <aside
-          className="sidebar"
-          id={sidebarID}
-          aria-hidden={true}
-          tabIndex="-1"
-          ref={sidebarRef}
-        >
-          <SideBar {...resumeData.sidebar} />
-        </aside>
+        {!isPhone && (
+          <aside
+            className="sidebar"
+            id={sidebarID}
+            aria-hidden={false}
+            tabIndex="-1"
+            ref={sidebarRef}
+          >
+            <SideBar {...resumeData.sidebar} />
+          </aside>
+        )}
         <aside className="content">
           <Content {...resumeData} />
         </aside>
