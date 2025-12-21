@@ -4,20 +4,20 @@ import Header from "comps/Header";
 import { Outlet, useLocation } from "react-router-dom";
 
 export default function Layout() {
-  const location = useLocation();
+  const { pathname: location } = useLocation();
 
   useEffect(() => {
     let pageName = "home";
-    if (location.pathname === "/resume") {
+    if (location === "/resume") {
       pageName = "resume";
-    } else if (location.pathname === "/projects") {
+    } else if (location === "/projects") {
       pageName = "projects";
     }
     document.body.setAttribute("location", pageName);
     return () => {
       document.body.removeAttribute("location");
     };
-  }, [location.pathname]);
+  }, [location]);
   return (
     <>
       <Header></Header>

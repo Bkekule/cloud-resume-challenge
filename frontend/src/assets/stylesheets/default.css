@@ -134,6 +134,7 @@ main {
     box-shadow: none;
     display: flex;
     flex-direction: column;
+    overflow-y: auto;
 
     & article {
       margin: 0;

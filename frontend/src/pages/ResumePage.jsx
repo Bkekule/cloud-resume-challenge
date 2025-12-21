@@ -77,6 +77,31 @@ export default function ResumePage() {
   };
 
   const sidebarID = "resume-sidebar";
+  if (sidebarOpen) {
+    return (
+      <div className="container">
+        <div className="main sidebar-open">
+          <aside
+            className="sidebar"
+            id={sidebarID}
+            aria-hidden={false}
+            tabIndex="-1"
+            ref={sidebarRef}
+          >
+            <Button
+              type="button"
+              onClick={handleSidebar}
+              aria-label="Close sidebar"
+              className="close-sidebar"
+              icon={<span>✕</span>}
+            />
+            <SideBar {...resumeData.sidebar} />
+          </aside>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="container">
       <ResumeHeader
@@ -87,24 +112,14 @@ export default function ResumePage() {
         sidebarID={sidebarID}
       />
       <Intro {...resumeData} />
-      <div className={`main${sidebarOpen ? " sidebar-open" : ""}`}>
+      <div className="main">
         <aside
           className="sidebar"
           id={sidebarID}
-          aria-hidden={!sidebarOpen}
-          hidden={sidebarOpen}
+          aria-hidden={true}
           tabIndex="-1"
           ref={sidebarRef}
         >
-          {sidebarOpen && (
-            <Button
-              type="button"
-              onClick={handleSidebar}
-              aria-label="Close sidebar"
-              className="close-sidebar"
-              icon={<span>✕</span>}
-            />
-          )}
           <SideBar {...resumeData.sidebar} />
         </aside>
         <aside className="content">

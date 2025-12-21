@@ -60,6 +60,7 @@ body[location="resume"] main .container {
   }
 
   & .main {
+    position: relative;
     display: flex;
     flex-flow: row wrap;
     margin-top: var(--space-lg);
@@ -170,36 +171,31 @@ body[location="resume"] main .container {
 }
 
 @media (--phone) {
+  body[location="resume"] main .container {
+    padding: 0;
+  }
+
   body[location="resume"] main .container .intro {
     text-align: center;
+    padding: var(--space-sm);
   }
 
   body[location="resume"] main .container .main {
     flex-direction: column;
+    padding: var(--space-sm);
 
     & aside.sidebar {
       display: none;
-    }
-
-    & .sidebar-open aside.sidebar {
-      display: flex;
-      position: relative;
-      inset: auto;
-      z-index: 1;
-      background: var(--color-bg);
-      overflow-y: auto;
-      padding: var(--space-xl) var(--space-md);
-
-      &::after {
-        inset: auto auto 0 0;
-        width: 100%;
-        height: 4px;
-      }
     }
   }
 
   body[location="resume"] main .container .header button.open-sidebar {
     display: inline-flex;
+  }
+
+  body[location="resume"] main .container .main.sidebar-open {
+    min-block-size: 100vh;
+    margin: 0;
   }
 
   body[location="resume"] main .container .main.sidebar-open aside.sidebar {
@@ -208,9 +204,23 @@ body[location="resume"] main .container {
     inset: 0;
     z-index: 1000;
     background: var(--text-bg);
+    block-size: 100%;
+    min-block-size: unset;
     overflow-y: auto;
     padding: var(--space-xl) var(--space-md);
     mask-image: none;
+
+    &::after {
+      /* To be revisited later content: "";
+      position: absolute;
+      inset: 0 0 0 auto;
+      inline-size: 4px;
+      block-size: 100%;
+      background: var(--sidebar-divider);
+      pointer-events: none;
+      z-index: 1001; */
+      display: none;
+    }
 
     & button.close-sidebar {
       position: absolute;
@@ -221,6 +231,10 @@ body[location="resume"] main .container {
     & section {
       text-align: left;
       align-items: flex-start;
+
+      & h2 {
+        text-align: left;
+      }
     }
   }
 
