@@ -10,8 +10,10 @@ export default function Layout() {
     let pageName = "home";
     if (location === "/resume") {
       pageName = "resume";
-    } else if (location === "/projects") {
+    } else if (location.startsWith("/projects")) {
       pageName = "projects";
+    } else if (location.startsWith("/home/blog")) {
+      pageName = "posts";
     }
     document.body.setAttribute("location", pageName);
     return () => {

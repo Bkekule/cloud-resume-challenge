@@ -12,6 +12,7 @@ export default function ResumePage() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const sidebarRef = useRef(null);
   const sidebarButtonRef = useRef(null);
+  const trap = useRef(null);
   const tabAbleSelectors = [
     "a[href]",
     "area[href]",
@@ -31,23 +32,14 @@ export default function ResumePage() {
 
   useEffect(() => {
     const onKeyDown = (e) => {
-      if (e.key === "Escape") setSidebarOpen(false);
-    };
-
-    if (sidebarOpen) {
-      document.addEventListener("keydown", onKeyDown);
-      return () => document.removeEventListener("keydown", onKeyDown);
-    }
-  }, [sidebarOpen]);
-
-  useEffect(() => {
-    if (sidebarOpen) return;
-
-    const onKeyDown = (e) => {
       if (e.key !== "Escape") return;
-      const active = document.activeElement;
-      if (active && typeof active.blur === "function") {
-        active.blur();
+
+      if (sidebarOpen) {
+        setSidebarOpen(false);
+      } else {
+        // This part can be moved to the layout if we can make it not depend on the sidebarOpen but mostly on the current focus area
+        const active = document.activeElement;
+        if (active?.blur) active.blur();
       }
     };
 
@@ -57,19 +49,36 @@ export default function ResumePage() {
 
   useEffect(() => {
     if (!sidebarRef.current) return;
-    const trap = createFocusTrap(sidebarRef.current, {
-      initialFocus: () => {
-        const tabAbleElt = sidebarRef.current.querySelector(
-          tabAbleSelectors.join(",")
-        );
-        return tabAbleElt || sidebarRef.current;
-      },
-      returnFocusOnDeactivate: true,
-      setReturnFocus: () => sidebarButtonRef.current,
-    });
-    if (sidebarOpen) trap.activate();
-    else trap.deactivate();
-    return () => trap.deactivate();
+
+    if (!trap.current) {
+      trap.current = createFocusTrap(sidebarRef.current, {
+        initialFocus: () => {
+          const tabAbleElt = sidebarRef.current.querySelector(
+            tabAbleSelectors.join(",")
+          );
+          return tabAbleElt || sidebarRef.current;
+        },
+        returnFocusOnDeactivate: true,
+        setReturnFocus: () => sidebarButtonRef.current,
+      });
+    }
+
+    return () => {
+      if (trap.current) {
+        trap.current.deactivate();
+        trap.current = null;
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!trap.current) return;
+
+    if (sidebarOpen) {
+      trap.current.activate();
+    } else {
+      trap.current.deactivate();
+    }
   }, [sidebarOpen]);
 
   const handleSidebar = () => {

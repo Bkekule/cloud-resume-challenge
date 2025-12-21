@@ -45,3 +45,7 @@ For images intended to be used for page texturizing, we may need to to optimize 
 - Chose to use React because it is the most popular javascript framework
 - Chose to use Vite.js over webpack because the frontend for this application is very simple
 - Configured React Router V7 in declarative mode.
+
+## Focus Trappins
+
+## Accessibility Features
