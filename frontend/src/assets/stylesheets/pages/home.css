@@ -1,31 +1,82 @@
 @import url("../breakpoints.css");
+@import url("https://fonts.googleapis.com/css2?family=Major+Mono+Display&display=swap");
 
 body[location="home"] main .container {
+  align-items: center;
+  gap: 1em;
+
+  & h1 {
+    font-family: "Major Mono Display", monospace;
+    font-weight: 400;
+    font-style: normal;
+    text-align: center;
+    text-shadow: 2px 2px 4px rgb(0 0 0 / 30%);
+  }
+
+  & .view-counter {
+    align-self: flex-end;
+    margin-right: 10em;
+    display: flex;
+    gap: 4px;
+    border: 2px solid black;
+    border-radius: 35%;
+    color: #e9e2e2ff;
+    padding: 0.25em 0.25em 0;
+    background-color: black;
+  }
+
   & img.profile-picture {
     min-width: 0;
     max-width: 300px;
     max-height: 300px;
     border-radius: 50%;
-    align-self: center;
-    margin-bottom: 2rem;
   }
 
-  & h2 {
-    text-align: center;
-    margin: 1rem;
-  }
-
-  & nav {
+  & .references {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    gap: 4em;
 
-    & a {
-      color: black;
+    & .recent-posts {
+      & h3 {
+        text-decoration: underline;
+      }
+
+      & nav {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        gap: 1em;
+
+        & .date {
+          font-weight: 700;
+        }
+
+        & a {
+          color: black;
+          font-weight: 400;
+          font-style: italic;
+        }
+
+        & a:hover {
+          text-decoration: underline;
+        }
+      }
     }
 
-    & :hover {
-      text-decoration: underline;
+    & .socials {
+      display: flex;
+      flex-direction: column;
+      gap: 1em;
+
+      /* stylelint-disable-next-line no-descending-specificity */
+      & > a {
+        border: 2px solid black;
+        border-radius: 50%;
+        padding: 0.5em;
+        background-color: black;
+        color: #e9e2e2ff;
+      }
     }
   }
 }
@@ -36,5 +87,18 @@ body[location="home"] main .container {
     max-width: 300px;
     max-height: 300px;
     align-self: center;
+  }
+
+  body[location="home"] main .container .references {
+    flex-direction: column;
+
+    & .socials {
+      flex-direction: row;
+      justify-content: space-between;
+    }
+  }
+
+  body[location="home"] main .container .view-counter {
+    margin-right: 0;
   }
 }
