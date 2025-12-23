@@ -59,11 +59,11 @@ handle: "project-slug"
 thumbnail: "https://example.com/image.jpg"
 description: "Short description"
 ---
+```
 
 ## Overview
 
 Project details written in natural markdown...
-```
 
 ## Benefits of This Approach
 
@@ -108,20 +108,20 @@ import frontmatter
 import os
 
 def load_projects():
-    projects = []
-    project_dir = 'data/projects'
+  projects = []
+  project_dir = 'data/projects'
 
-    for filename in os.listdir(project_dir):
-        if filename.endswith('.md'):
-            with open(os.path.join(project_dir, filename), 'r') as f:
-                post = frontmatter.load(f)
-                project = {
-                    **post.metadata,
-                    'body': post.content
-                }
-                projects.append(project)
+  for filename in os.listdir(project_dir):
+    if filename.endswith('.md'):
+      with open(os.path.join(project_dir, filename), 'r') as f:
+        post = frontmatter.load(f)
+        project = {
+          **post.metadata,
+          'body': post.content
+        }
+        projects.append(project)
 
-    return projects
+  return projects
 ```
 
 ## Lessons Learned

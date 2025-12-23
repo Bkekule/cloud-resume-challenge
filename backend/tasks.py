@@ -19,7 +19,20 @@ def convert_markdown_to_html(
         post = frontmatter.load(str(md_file))
         
         project = dict(post.metadata)
-        project['body_html'] = markdown.markdown(post.content)
+        project['body_html'] = markdown.markdown(
+            post.content,
+            extensions=[
+                'fenced_code',
+                'codehilite'
+            ],
+            extension_configs={
+                'codehilite': {
+                    'guess_lang': False,
+                    'noclasses': False,
+                    'css_class': 'codehilite'
+                }
+            }
+        )
         projects.append(project)
     
     with open(output_file, 'w') as f:
