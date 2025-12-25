@@ -48,4 +48,8 @@ For images intended to be used for page texturizing, we may need to to optimize 
 
 ## Focus Trappins
 
+I am using focus trappings to control tabbing in sutuations where I want to tabable region to stay withing an overlayed element.
+
 ## Accessibility Features
+
+- Was interested in the challenge of integrating accessibility features into html elements. Microsoft Edge does a good job at catching those. Will be looking into enxtensions as a more reliable solution.
