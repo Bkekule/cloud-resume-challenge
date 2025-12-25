@@ -4,7 +4,7 @@ import json
 counter = 42  # Starting value
 
 class CounterHandler(BaseHTTPRequestHandler):
-    def do_GET(self):
+    def do_GET(self) -> None:
         global counter
         self.send_response(200)
         self.send_header("Content-Type", "application/json")
@@ -12,7 +12,7 @@ class CounterHandler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(json.dumps({"count": counter}).encode())
 
-    def do_POST(self):
+    def do_POST(self) -> None:
         global counter
         content_length = int(self.headers.get("Content-Length", 0))
         body = self.rfile.read(content_length)
@@ -25,7 +25,7 @@ class CounterHandler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(json.dumps({"count": counter}).encode())
 
-    def do_OPTIONS(self):
+    def do_OPTIONS(self) -> None:
         self.send_response(200)
         self.send_header("Access-Control-Allow-Origin", "*")
         self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
