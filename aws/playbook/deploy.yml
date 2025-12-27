@@ -6,7 +6,7 @@
 
   vars:
     env: dev
-    template_path: "{{ playbook_dir | path_join('..', 'template.yml') }}"
+    template_path: "{{ path_join(playbook_dir, '..', 'template.yml') }}"
 
   pre_tasks:
     - name: Validate environment selection
