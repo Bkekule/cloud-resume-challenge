@@ -19,3 +19,5 @@ Ansible is used for cofiguration management and deploying AWS infrastructure for
   ansible-galaxy collection install amazon.aws
 - install boto packages
   pip install boto3 botocore
+
+Work around with codespaces. Anibe creates its own venv, it expects boto3 and botocore to be installed within thatn venv so that is a manual inconvenience that is needed to get the deploymnet going.
