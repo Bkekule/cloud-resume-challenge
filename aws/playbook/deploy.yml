@@ -34,16 +34,16 @@
   tasks:
     - name: Deploy CloudFormation stack
       amazon.aws.cloudformation:
-      stack_name: "{{ stack_name }}"
-      state: present
-      region: "{{ region }}"
-      template: "{{ template_path }}"
-      template_parameters:
-        BucketName: "{{ bucket_name }}"
-      environment:
-      AWS_ACCESS_KEY_ID: "{{ aws_access_key_id }}"
-      AWS_SECRET_ACCESS_KEY: "{{ aws_secret_access_key }}"
-      register: cf_output
+        stack_name: "{{ stack_name }}"
+        state: present
+        region: "{{ region }}"
+        template: "{{ template_path }}"
+        template_parameters:
+          BucketName: "{{ bucket_name }}"
+        environment:
+        AWS_ACCESS_KEY_ID: "{{ aws_access_key_id }}"
+        AWS_SECRET_ACCESS_KEY: "{{ aws_secret_access_key }}"
+        register: cf_output
 
     - name: Display stack outputs
       ansible.builtin.debug:
