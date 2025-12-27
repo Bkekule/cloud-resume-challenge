@@ -3,5 +3,9 @@
   "stylelint.validate": ["css", "scss", "postcss"],
   "editor.codeActionsOnSave": {
     "source.fixAll.stylelint": "explicit"
-  }
+  },
+  "files.associations": {
+    "**/aws/template.yml": "cloudformation"
+  },
+  "ansible.python.interpreterPath": "d:\\Git\\cloud-resume-challenge\\.venv\\Scripts\\python.exe"
 }
