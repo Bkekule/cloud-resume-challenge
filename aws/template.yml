@@ -1,6 +1,9 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Description: S3 bucket for static website hosting
-
+Parameters:
+  BucketName:
+    Type: String
+    Description: Name of the S3 bucket
 Resources:
   S3Bucket:
     Type: AWS::S3::Bucket
@@ -14,7 +17,7 @@ Resources:
           - S3_BUCKET_VERSIONING_ENABLED
 
     Properties:
-      BucketName: !Sub "${AWS::StackName}-bucket"
+      BucketName: !Ref BucketName
       BucketEncryption:
         ServerSideEncryptionConfiguration:
           - ServerSideEncryptionByDefault:
