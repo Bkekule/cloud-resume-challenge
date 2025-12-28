@@ -27,3 +27,10 @@ ansible vaults are used to stor access key and secret for machine user. These ar
 
 #### Communication Between Playbooks
 Use yml file to communicate values between plays
+
+
+To deploy, complete in the following order.
+```sh
+env=prod ./aws/bin/deploy
+env=prod ./aws/bin/build_n_uplod
+```

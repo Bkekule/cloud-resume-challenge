@@ -1,8 +1,9 @@
 #! /usr/bin/env bash
+env=${env:-dev}
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 RESULTS_FILE=/tmp/result.json
-ansible-playbook "$SCRIPT_DIR/../playbook/deploy.yml" --ask-vault-pass > $RESULTS_FILE
+ansible-playbook "$SCRIPT_DIR/../playbook/deploy.yml" -e env=$env --ask-vault-pass > $RESULTS_FILE
 
 # Extract and rewrite as JSON
 cloudfront_id=$(awk -F'"' '/CloudFrontDistributionId/ {print $4}' $RESULTS_FILE)

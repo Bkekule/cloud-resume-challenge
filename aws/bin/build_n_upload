@@ -1,5 +1,7 @@
 #! /usr/bin/env bash
 
+env=${env:-dev}
+
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ansible-galaxy collection install -r "$SCRIPT_DIR/../playbook/requirements.yml"
-ansible-playbook "$SCRIPT_DIR/../playbook/build_n_upload.yml" --ask-vault-pass -e @/tmp/cloudfront_output.yml
+ansible-playbook "$SCRIPT_DIR/../playbook/build_n_upload.yml" -e env=$env -e @/tmp/cloudfront_output.yml --ask-vault-pass
