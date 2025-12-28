@@ -4,15 +4,15 @@ Parameters:
   BucketName:
     Type: String
     Description: Name of the S3 bucket
+  CloudFrontDistributionArn:
+    Type: String
+    Description: ARN of the CloudFront distribution that will access this bucket via Origin Access Control (e.g., arn:aws:cloudfront::<account-id>:distribution/<distribution-id>)
 Resources:
   S3Bucket:
     Type: AWS::S3::Bucket
     Metadata:
       guard:
         SuppressedRules:
-          - S3_BUCKET_LEVEL_PUBLIC_ACCESS_PROHIBITED
-          - S3_BUCKET_PUBLIC_READ_PROHIBITED
-          - S3_BUCKET_PUBLIC_WRITE_PROHIBITED
           - S3_BUCKET_LOGGING_ENABLED
           - S3_BUCKET_VERSIONING_ENABLED
 
@@ -23,13 +23,10 @@ Resources:
           - ServerSideEncryptionByDefault:
               SSEAlgorithm: AES256
       PublicAccessBlockConfiguration:
-        BlockPublicAcls: false
-        BlockPublicPolicy: false
-        IgnorePublicAcls: false
-        RestrictPublicBuckets: false
-      WebsiteConfiguration:
-        IndexDocument: index.html
-        ErrorDocument: error.html
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
 
   S3BucketPolicy:
     Type: AWS::S3::BucketPolicy
@@ -37,11 +34,15 @@ Resources:
       Bucket: !Ref S3Bucket
       PolicyDocument:
         Statement:
-          - Sid: PublicReadGetObject
+          - Sid: AllowCloudFrontReadOAC
             Effect: Allow
-            Principal: "*"
+            Principal:
+              Service: cloudfront.amazonaws.com
             Action: "s3:GetObject"
             Resource: !Sub "${S3Bucket.Arn}/*"
+            Condition:
+              StringEquals:
+                AWS:SourceArn: !Ref CloudFrontDistributionArn
           - Sid: DenyInsecureConnections
             Effect: Deny
             Principal: "*"
@@ -57,7 +58,3 @@ Outputs:
   BucketName:
     Description: Name of the S3 bucket
     Value: !Ref S3Bucket
-
-  WebsiteURL:
-    Description: URL of the website
-    Value: !GetAtt S3Bucket.WebsiteURL

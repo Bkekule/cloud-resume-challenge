@@ -12,16 +12,16 @@
     - name: Validate environment selection
       ansible.builtin.assert:
         that:
-          - env in ['dev', 'prod']
+          - env in ['dev', 'qa', 'prod']
         fail_msg: "Invalid env '{{ env }}'. Use dev, qa, or prod."
 
     - name: Load environment vars
       ansible.builtin.include_vars:
-        file: "{{ playbook_dir }}/environments/{{ env }}/env.yml"
+        file: "{{ [playbook_dir, 'environment', 'env.yml'] | path_join }}"
 
     - name: Load vault vars
       ansible.builtin.include_vars:
-        file: "{{ playbook_dir }}/environments/{{ env }}/vault.yml"
+        file: "{{ [playbook_dir, 'environment', 'vault.yml'] | path_join }}"
 
     - name: Assert required vars exist
       ansible.builtin.assert:
@@ -29,7 +29,8 @@
           - stack_name is defined
           - region is defined
           - bucket_name is defined
-        fail_msg: "Missing required env vars: 'stack_name' 'bucket_name', and/or 'region'"
+          - cloudfront_distribution_arn is defined
+        fail_msg: "Missing required env vars: 'stack_name' 'bucket_name', 'cloudfront_distribution_arn', and/or 'region'"
 
   tasks:
     - name: Deploy CloudFormation stack
@@ -40,6 +41,7 @@
         template: "{{ template_path }}"
         template_parameters:
           BucketName: "{{ bucket_name }}"
+          CloudFrontDistributionArn: "{{ cloudfront_distribution_arn }}"
         aws_access_key_id: "{{ aws_access_key_id }}"
         aws_secret_access_key: "{{ aws_secret_access_key }}"
       register: cf_output
