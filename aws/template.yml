@@ -129,18 +129,12 @@ Resources:
 Outputs:
   CloudFrontDistributionId:
     Description: CloudFront distribution ID
-    Export:
-      Name: cloud_distribution_id
     Value: !Ref CloudFrontDistribution
 
   CloudFrontDistributionArn:
     Description: CloudFront distribution ARN
-    Export:
-      Name: cloud_distribution_arn
     Value: !Sub "arn:aws:cloudfront::${AWS::AccountId}:distribution/${CloudFrontDistribution}"
 
   CloudFrontDomainName:
     Description: CloudFront distribution domain name
-    Export:
-      Name: cloudfront_domain_name
     Value: !GetAtt CloudFrontDistribution.DomainName
