@@ -94,7 +94,7 @@
 
     - name: Create CloudFront invalidation for all paths
       amazon.aws.cloudfront_invalidation:
-        distribution_id: "{{ cloud_distribution_id }}"
+        distribution_id: "{{ CloudFrontDistributionId }}"
         paths:
           - "/*"
         wait: true

@@ -7,11 +7,9 @@ Parameters:
   CustomDomain:
     Type: String
     Description: Custom domain name (e.g., borisatudn.online)
-    Default: ""
   HostedZoneId:
     Type: String
     Description: Route 53 hosted zone ID that serves the CustomDomain
-    Default: ""
 Conditions:
   HasCustomDomain: !And
     - !Not [!Equals [!Ref CustomDomain, ""]]
