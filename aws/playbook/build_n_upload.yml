@@ -96,16 +96,16 @@
         aws_secret_access_key: "{{ aws_secret_access_key }}"
       loop: "{{ built_files.files }}"
 
-    # - name: Create CloudFront invalidation for all paths
-    #   amazon.aws.cloudfront_invalidation:
-    #     distribution_id: "{{ cloudfront_distribution_id }}"
-    #     paths:
-    #       - "/*"
-    #     wait: true
-    #     aws_access_key_id: "{{ aws_access_key_id }}"
-    #     aws_secret_access_key: "{{ aws_secret_access_key }}"
-    #   register: invalidation
+    - name: Create CloudFront invalidation for all paths
+      amazon.aws.cloudfront_invalidation:
+        distribution_id: "{{ CloudFrontDistributionId }}"
+        paths:
+          - "/*"
+        wait: true
+        aws_access_key_id: "{{ aws_access_key_id }}"
+        aws_secret_access_key: "{{ aws_secret_access_key }}"
+      register: invalidation
 
-    # - name: Show invalidation details
-    #   ansible.builtin.debug:
-    #     var: invalidation
+    - name: Show invalidation details
+      ansible.builtin.debug:
+        var: invalidation

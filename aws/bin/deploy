@@ -1,4 +1,4 @@
 #! /usr/bin/env bash
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-ansible-playbook "$SCRIPT_DIR/../playbook/deploy.yml" --ask-vault-pass
+ansible-playbook "$SCRIPT_DIR/../playbook/deploy.yml" --ask-vault-pass > result.json
