@@ -41,6 +41,7 @@
         template_parameters:
           BucketName: "{{ bucket_name }}"
           CustomDomain: "{{ custom_domain }}"
+          HostedZoneId: "{{ hosted_zone_id }}"
         aws_access_key_id: "{{ aws_access_key_id }}"
         aws_secret_access_key: "{{ aws_secret_access_key }}"
       register: cf_output

@@ -8,8 +8,14 @@ Parameters:
     Type: String
     Description: Custom domain name (e.g., borisatudn.online)
     Default: ""
+  HostedZoneId:
+    Type: String
+    Description: Route 53 hosted zone ID that serves the CustomDomain
+    Default: ""
 Conditions:
-  HasCustomDomain: !Not [!Equals [!Ref CustomDomain, ""]]
+  HasCustomDomain: !And
+    - !Not [!Equals [!Ref CustomDomain, ""]]
+    - !Not [!Equals [!Ref HostedZoneId, ""]]
 Resources:
   S3Bucket:
     Type: AWS::S3::Bucket
@@ -76,7 +82,9 @@ Resources:
         - !Sub "www.${CustomDomain}"
       DomainValidationOptions:
         - DomainName: !Ref CustomDomain
-          ValidationDomain: !Ref CustomDomain
+          HostedZoneId: !Ref HostedZoneId
+        - DomainName: !Sub "www.${CustomDomain}"
+          HostedZoneId: !Ref HostedZoneId
       ValidationMethod: DNS
 
   CloudFrontDistribution:
