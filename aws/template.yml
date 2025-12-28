@@ -4,9 +4,12 @@ Parameters:
   BucketName:
     Type: String
     Description: Name of the S3 bucket
-  CloudFrontDistributionArn:
+  CustomDomain:
     Type: String
-    Description: ARN of the CloudFront distribution that will access this bucket via Origin Access Control (e.g., arn:aws:cloudfront::<account-id>:distribution/<distribution-id>)
+    Description: Custom domain name (e.g., borisatudn.online)
+    Default: ""
+Conditions:
+  HasCustomDomain: !Not [!Equals [!Ref CustomDomain, ""]]
 Resources:
   S3Bucket:
     Type: AWS::S3::Bucket
@@ -42,7 +45,7 @@ Resources:
             Resource: !Sub "${S3Bucket.Arn}/*"
             Condition:
               StringEquals:
-                AWS:SourceArn: !Ref CloudFrontDistributionArn
+                AWS:SourceArn: !Sub "arn:${AWS::Partition}:cloudfront::${AWS::AccountId}:distribution/${CloudFrontDistribution}"
           - Sid: DenyInsecureConnections
             Effect: Deny
             Principal: "*"
@@ -54,7 +57,88 @@ Resources:
               Bool:
                 aws:SecureTransport: false
 
+  OriginAccessControl:
+    Type: AWS::CloudFront::OriginAccessControl
+    Properties:
+      OriginAccessControlConfig:
+        Name: !Sub "${BucketName}-oac"
+        Description: Origin Access Control for S3 bucket
+        OriginAccessControlOriginType: s3
+        SigningProtocol: sigv4
+        SigningBehavior: always
+
+  ACMCertificate:
+    Type: AWS::CertificateManager::Certificate
+    Condition: HasCustomDomain
+    Properties:
+      DomainName: !Ref CustomDomain
+      SubjectAlternativeNames:
+        - !Sub "www.${CustomDomain}"
+      DomainValidationOptions:
+        - DomainName: !Ref CustomDomain
+          ValidationDomain: !Ref CustomDomain
+      ValidationMethod: DNS
+
+  CloudFrontDistribution:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Enabled: true
+        Comment: !Sub "CloudFront distribution for ${BucketName}"
+        DefaultRootObject: index.html
+        Aliases:
+          - !If [HasCustomDomain, !Ref CustomDomain, !Ref "AWS::NoValue"]
+          - !If [
+              HasCustomDomain,
+              !Sub "www.${CustomDomain}",
+              !Ref "AWS::NoValue",
+            ]
+        Origins:
+          - Id: S3Origin
+            DomainName: !GetAtt S3Bucket.RegionalDomainName
+            S3OriginConfig: {}
+            OriginAccessControlId: !Ref OriginAccessControl
+        DefaultCacheBehavior:
+          TargetOriginId: S3Origin
+          ViewerProtocolPolicy: redirect-to-https
+          AllowedMethods:
+            - GET
+            - HEAD
+            - OPTIONS
+          CachedMethods:
+            - GET
+            - HEAD
+          Compress: true
+          CachePolicyId: 658327ea-f89d-4fab-a63d-7e88639e58f6 # AWS-managed "CachingOptimized" policy
+        CustomErrorResponses:
+          - ErrorCode: 403
+            ResponsePagePath: /index.html
+            ResponseCode: "200"
+            ErrorCachingMinTTL: 300
+          - ErrorCode: 404
+            ResponsePagePath: /index.html
+            ResponseCode: "200"
+            ErrorCachingMinTTL: 300
+        ViewerCertificate: !If
+          - HasCustomDomain
+          - AcmCertificateArn: !Ref ACMCertificate
+            SslSupportMethod: sni-only
+            MinimumProtocolVersion: TLSv1.2_2021
+          - CloudFrontDefaultCertificate: true
+
 Outputs:
   BucketName:
     Description: Name of the S3 bucket
     Value: !Ref S3Bucket
+
+  CloudFrontDistributionId:
+    Description: CloudFront distribution ID
+    Value: !Ref CloudFrontDistribution
+
+  CloudFrontDistributionArn:
+    Description: CloudFront distribution ARN
+    Value: !Sub "arn:aws:cloudfront::${AWS::AccountId}:distribution/${CloudFrontDistribution}"
+
+  CloudFrontDomainName:
+    Description: CloudFront distribution domain name
+    Value: !GetAtt CloudFrontDistribution.DomainName

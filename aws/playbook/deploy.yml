@@ -29,8 +29,7 @@
           - stack_name is defined
           - region is defined
           - bucket_name is defined
-          - cloudfront_distribution_arn is defined
-        fail_msg: "Missing required env vars: 'stack_name' 'bucket_name', 'cloudfront_distribution_arn', and/or 'region'"
+        fail_msg: "Missing required env vars: 'stack_name' 'bucket_name', and/or 'region'"
 
   tasks:
     - name: Deploy CloudFormation stack
@@ -41,7 +40,7 @@
         template: "{{ template_path }}"
         template_parameters:
           BucketName: "{{ bucket_name }}"
-          CloudFrontDistributionArn: "{{ cloudfront_distribution_arn }}"
+          CustomDomain: "{{ custom_domain }}"
         aws_access_key_id: "{{ aws_access_key_id }}"
         aws_secret_access_key: "{{ aws_secret_access_key }}"
       register: cf_output
