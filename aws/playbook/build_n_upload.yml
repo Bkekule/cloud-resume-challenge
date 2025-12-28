@@ -1,0 +1,115 @@
+---
+- name: Build frontend and upload to S3
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  vars:
+    env: dev
+    frontend_dir: "{{ [playbook_dir, '..', '..', 'frontend'] | path_join }}"
+    build_dir: "{{ [frontend_dir, 'dist'] | path_join }}"
+
+  pre_tasks:
+    - name: Validate environment selection
+      ansible.builtin.assert:
+        that:
+          - env in ['dev', 'qa', 'prod']
+        fail_msg: "Invalid env '{{ env }}'. Use dev, qa, or prod."
+
+    - name: Load environment vars
+      ansible.builtin.include_vars:
+        file: "{{ [playbook_dir, 'environment', 'env.yml'] | path_join }}"
+
+    - name: Load vault vars
+      ansible.builtin.include_vars:
+        file: "{{ [playbook_dir, 'environment', 'vault.yml'] | path_join }}"
+
+    - name: Assert required vars exist
+      ansible.builtin.assert:
+        that:
+          - bucket_name is defined
+          - region is defined
+          - cloudfront_distribution_arn is defined
+          - aws_access_key_id is defined
+          - aws_secret_access_key is defined
+        fail_msg: "Missing required vars: 'bucket_name', 'region', 'cloudfront_distribution_arn', and/or AWS credentials"
+
+    - name: Derive CloudFront distribution ID from ARN
+      ansible.builtin.set_fact:
+        cloudfront_distribution_id: "{{ cloudfront_distribution_arn | regex_replace('^.*/distribution/', '') }}"
+
+  tasks:
+    - name: Ensure Node.js is available
+      ansible.builtin.command: node --version
+      changed_when: false
+      register: node_check
+      failed_when: node_check.rc != 0
+
+    - name: Check for package-lock.json
+      ansible.builtin.stat:
+        path: "{{ [frontend_dir, 'package-lock.json'] | path_join }}"
+      register: lockfile
+
+    - name: Install dependencies (npm ci)
+      ansible.builtin.command:
+        cmd: npm ci
+        chdir: "{{ frontend_dir }}"
+      when: lockfile.stat.exists
+
+    - name: Install dependencies (npm install)
+      ansible.builtin.command:
+        cmd: npm install
+        chdir: "{{ frontend_dir }}"
+      when: not lockfile.stat.exists
+
+    - name: Build frontend
+      ansible.builtin.command:
+        cmd: npm run build
+        chdir: "{{ frontend_dir }}"
+
+    - name: Ensure build directory exists
+      ansible.builtin.stat:
+        path: "{{ build_dir }}"
+      register: builddir
+
+    - name: Fail if build directory missing
+      ansible.builtin.fail:
+        msg: "Build output not found at {{ build_dir }}"
+      when: not builddir.stat.exists
+
+    - name: Find built files
+      ansible.builtin.find:
+        paths: "{{ build_dir }}"
+        recurse: true
+        file_type: file
+      register: built_files
+
+    # - name: Normalize build_dir for key calculation (cross-platform compatibility)
+    #   ansible.builtin.set_fact:
+    #     build_dir_norm: "{{ build_dir | replace('\\', '/') }}"
+
+    - name: Upload files to S3 bucket
+      amazon.aws.s3_object:
+        bucket: "{{ bucket_name }}"
+        object: "{{ (item.path | replace('\\', '/')) | regex_replace('^' ~ build_dir ~ '/', '') }}"
+        src: "{{ item.path }}"
+        mode: put
+        region: "{{ region }}"
+        overwrite: always
+        aws_access_key_id: "{{ aws_access_key_id }}"
+        aws_secret_access_key: "{{ aws_secret_access_key }}"
+      loop: "{{ built_files.files }}"
+
+    - name: Create CloudFront invalidation for all paths
+      amazon.aws.cloudfront_invalidation:
+        distribution_id: "{{ cloudfront_distribution_id }}"
+        paths:
+          - "/*"
+        wait: true
+        aws_access_key_id: "{{ aws_access_key_id }}"
+        aws_secret_access_key: "{{ aws_secret_access_key }}"
+      register: invalidation
+
+    - name: Show invalidation details
+      ansible.builtin.debug:
+        var: invalidation
