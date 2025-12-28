@@ -21,3 +21,9 @@ Ansible is used for cofiguration management and deploying AWS infrastructure for
   pip install boto3 botocore
 
 Work around with codespaces. Anibe creates its own venv, it expects boto3 and botocore to be installed within thatn venv so that is a manual inconvenience that is needed to get the deploymnet going.
+
+#### Credentials
+ansible vaults are used to stor access key and secret for machine user. These are used to autheticate into AWS for deployment. Ansible vaults, being encrypted, are safe to commit to GH.
+
+#### Communication Between Playbooks
+Use yml file to communicate values between plays

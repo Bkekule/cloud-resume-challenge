@@ -29,10 +29,11 @@
         that:
           - bucket_name is defined
           - region is defined
-          - cloudfront_distribution_arn is defined
+          - cloudfront_distribution_id is defined
           - aws_access_key_id is defined
           - aws_secret_access_key is defined
-        fail_msg: "Missing required vars: 'bucket_name', 'region', 'cloudfront_distribution_arn', and/or AWS credentials"
+        fail_msg: "Missing required vars: 'bucket_name', 'region', 'cloudfront_distribution_id', and/or AWS credentials"
+        quiet: false
 
   tasks:
     - name: Ensure Node.js is available
@@ -93,11 +94,10 @@
       loop: "{{ built_files.files }}"
 
     - name: Create CloudFront invalidation for all paths
-      amazon.aws.cloudfront_invalidation:
-        distribution_id: "{{ CloudFrontDistributionId }}"
-        paths:
+      community.aws.cloudfront_invalidation:
+        distribution_id: "{{ cloudfront_distribution_id }}"
+        target_paths:
           - "/*"
-        wait: true
         aws_access_key_id: "{{ aws_access_key_id }}"
         aws_secret_access_key: "{{ aws_secret_access_key }}"
       register: invalidation

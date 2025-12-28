@@ -29,7 +29,7 @@
           - stack_name is defined
           - region is defined
           - bucket_name is defined
-        fail_msg: "Missing required env vars: 'stack_name' 'bucket_name', and/or 'region'"
+        fail_msg: "Missing required env vars: 'stack_name', 'bucket_name', and/or 'region'"
 
   tasks:
     - name: Deploy CloudFormation stack
