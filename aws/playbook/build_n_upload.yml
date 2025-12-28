@@ -34,10 +34,6 @@
           - aws_secret_access_key is defined
         fail_msg: "Missing required vars: 'bucket_name', 'region', 'cloudfront_distribution_arn', and/or AWS credentials"
 
-    - name: Derive CloudFront distribution ID from ARN
-      ansible.builtin.set_fact:
-        cloudfront_distribution_id: "{{ cloudfront_distribution_arn | regex_replace('^.*/distribution/', '') }}"
-
   tasks:
     - name: Ensure Node.js is available
       ansible.builtin.command: node --version
@@ -98,7 +94,7 @@
 
     - name: Create CloudFront invalidation for all paths
       amazon.aws.cloudfront_invalidation:
-        distribution_id: "{{ CloudFrontDistributionId }}"
+        distribution_id: "{{ cloud_distribution_id }}"
         paths:
           - "/*"
         wait: true
