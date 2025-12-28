@@ -84,14 +84,10 @@
         file_type: file
       register: built_files
 
-    # - name: Normalize build_dir for key calculation (cross-platform compatibility)
-    #   ansible.builtin.set_fact:
-    #     build_dir_norm: "{{ build_dir | replace('\\', '/') }}"
-
     - name: Upload files to S3 bucket
       amazon.aws.s3_object:
         bucket: "{{ bucket_name }}"
-        object: "{{ (item.path | replace('\\', '/')) | regex_replace('^' ~ build_dir ~ '/', '') }}"
+        object: "{{ item.path | relpath(build_dir) }}"
         src: "{{ item.path }}"
         mode: put
         region: "{{ region }}"
@@ -100,16 +96,16 @@
         aws_secret_access_key: "{{ aws_secret_access_key }}"
       loop: "{{ built_files.files }}"
 
-    - name: Create CloudFront invalidation for all paths
-      amazon.aws.cloudfront_invalidation:
-        distribution_id: "{{ cloudfront_distribution_id }}"
-        paths:
-          - "/*"
-        wait: true
-        aws_access_key_id: "{{ aws_access_key_id }}"
-        aws_secret_access_key: "{{ aws_secret_access_key }}"
-      register: invalidation
+    # - name: Create CloudFront invalidation for all paths
+    #   amazon.aws.cloudfront_invalidation:
+    #     distribution_id: "{{ cloudfront_distribution_id }}"
+    #     paths:
+    #       - "/*"
+    #     wait: true
+    #     aws_access_key_id: "{{ aws_access_key_id }}"
+    #     aws_secret_access_key: "{{ aws_secret_access_key }}"
+    #   register: invalidation
 
-    - name: Show invalidation details
-      ansible.builtin.debug:
-        var: invalidation
+    # - name: Show invalidation details
+    #   ansible.builtin.debug:
+    #     var: invalidation
