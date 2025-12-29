@@ -3,7 +3,13 @@ env=${env:-dev}
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 RESULTS_FILE=/tmp/result.json
-ansible-playbook "$SCRIPT_DIR/../playbook/deploy-frontend.yml" -e env=$env --ask-vault-pass > $RESULTS_FILE
+ansible-playbook "$SCRIPT_DIR/../playbook/deploy-frontend.yml" -e env=$env --ask-vault-pass -vvv > $RESULTS_FILE 2>&1
+
+if [ $? -ne 0 ]; then
+  echo "Ansible playbook failed:"
+  cat $RESULTS_FILE
+  exit 1
+fi
 
 # Extract and rewrite as JSON
 cloudfront_id=$(awk -F'"' '/CloudFrontDistributionId/ {print $4}' $RESULTS_FILE)
