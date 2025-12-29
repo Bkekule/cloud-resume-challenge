@@ -6,6 +6,5 @@
   },
   "files.associations": {
     "**/aws/frontend.yml": "cloudformation"
-  },
-  "ansible.python.interpreterPath": "d:\\Git\\cloud-resume-challenge\\.venv\\Scripts\\python.exe"
+  }
 }
