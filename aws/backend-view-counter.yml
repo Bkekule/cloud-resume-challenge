@@ -9,6 +9,9 @@ Parameters:
     FunctionNameParameter:
         Type: String
         Description: Name of the Lambda function
+    WebPageOrigin:
+        Type: String
+        Description: Origin hosting the webpage making calls to ViewCounter endpoint
     ENV:
         Type: String
         Description: Staging Environment
@@ -20,6 +23,7 @@ Globals:
         Environment:
             Variables:
                 TABLE_NAME: !Ref ViewCounterTable
+                WEB_PAGE_ORIGIN: !Ref WebPageOrigin
 
 Resources:
     ViewCounterTable:
@@ -62,6 +66,23 @@ Resources:
         Properties:
             StageName: !Ref ENV
             TracingEnabled: true
+            Cors:
+                AllowOrigin: !Sub "'${WebPageOrigin}'"
+                AllowMethods: "'GET,POST,OPTIONS'"
+                AllowHeaders: "'Content-Type,Authorization'"
+            GatewayResponses:
+                DEFAULT_4XX:
+                    ResponseParameters:
+                        Headers:
+                            Access-Control-Allow-Origin: !Sub "'${WebPageOrigin}'"
+                            Access-Control-Allow-Methods: "'GET,POST,OPTIONS'"
+                            Access-Control-Allow-Headers: "'Content-Type,Authorization'"
+                DEFAULT_5XX:
+                    ResponseParameters:
+                        Headers:
+                            Access-Control-Allow-Origin: !Sub "'${WebPageOrigin}'"
+                            Access-Control-Allow-Methods: "'GET,POST,OPTIONS'"
+                            Access-Control-Allow-Headers: "'Content-Type,Authorization'"
 
 Outputs:
     ApiEndpoint:

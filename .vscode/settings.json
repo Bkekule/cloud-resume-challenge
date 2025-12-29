@@ -6,7 +6,7 @@
   },
   "files.associations": {
     "**/aws/frontend.yml": "cloudformation",
-    "**/aws/backend-viewcounter.yml": "cloudformation",
+    "**/aws/backend-view-counter.yml": "cloudformation",
     "**/aws/backend-prerequisites.yml": "cloudformation"
   }
 }

@@ -6,7 +6,7 @@
 
   vars:
     env: dev
-    template_path: "{{ [playbook_dir, '..', 'backend-viewcounter.yml'] | path_join }}"
+    template_path: "{{ [playbook_dir, '..', 'backend-view-counter.yml'] | path_join }}"
     backend_prerequisites_path: "{{ [playbook_dir, '..', 'backend-prerequisites.yml'] | path_join }}"
     aws_folder: "{{ [playbook_dir, '..'] | path_join }}"
 
@@ -40,7 +40,8 @@
           - backend_stack_name is defined
           - view_counter_table_name is defined
           - view_counter_function_name is defined
-        fail_msg: "Missing required vars: 'region', 'artifact_bucket_name', 'backend_view_counter_stack_name', 'backend_stack_name', 'view_counter_table_name', 'view_counter_function_name', and/or AWS credentials."
+          - webpage_origin_url is defined
+        fail_msg: "Missing required vars: 'region', 'artifact_bucket_name', 'backend_view_counter_stack_name', 'backend_stack_name', 'view_counter_table_name', 'view_counter_function_name', 'webpage_origin_url', and/or AWS credentials."
 
   tasks:
     - name: Deploy CloudFormation stack for backend prerequisites
@@ -91,6 +92,7 @@
           --parameter-overrides
           TableNameParameter="{{ view_counter_table_name }}"
           FunctionNameParameter="{{ view_counter_function_name }}"
+          WebPageOrigin="{{ webpage_origin_url }}"
           ENV="{{ env }}"
         chdir: "{{ aws_folder }}"
       environment:

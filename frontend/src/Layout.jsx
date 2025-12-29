@@ -32,7 +32,7 @@ export default function Layout() {
           method: "GET",
           headers: { Accept: "application/json" },
         });
-        let current = 0;
+        let current;
         if (getRes.ok) {
           const text = await getRes.text();
           let data;

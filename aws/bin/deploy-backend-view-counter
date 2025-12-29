@@ -3,4 +3,4 @@ env=${env:-dev}
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 RESULTS_FILE=/tmp/result.json
-ansible-playbook "$SCRIPT_DIR/../playbook/deploy-viewcounter-backend.yml" -e env=$env --ask-vault-pass
+ansible-playbook "$SCRIPT_DIR/../playbook/deploy-backend-view-counter.yml" -e env=$env --ask-vault-pass
