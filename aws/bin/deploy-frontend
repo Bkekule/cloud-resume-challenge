@@ -2,7 +2,10 @@
 env=${env:-dev}
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-RESULTS_FILE=/tmp/result.json
+RESULTS_FILE=$SCRIPT_DIR/build/result.json
+mkdir -p "$SCRIPT_DIR/build"
+touch $RESULTS_FILE
+
 ansible-playbook "$SCRIPT_DIR/../playbook/deploy-frontend.yml" -e env=$env --ask-vault-pass -vvv > $RESULTS_FILE 2>&1
 
 if [ $? -ne 0 ]; then
@@ -11,7 +14,5 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
-# Extract and rewrite as JSON
-cloudfront_id=$(awk -F'"' '/CloudFrontDistributionId/ {print $4}' $RESULTS_FILE)
-echo "{\"cloudfront_distribution_id\": \"$cloudfront_id\"}" > /tmp/cloudfront_output.json
-echo "cloudfront_distribution_id: $cloudfront_id" > /tmp/cloudfront_output.yml
+cloudfront_id=$(awk -F'"' '/CloudFrontDistributionId/ {print $4}' $RESULTS_FILE | head -1)
+echo "cloudfront_distribution_id: $cloudfront_id" > $SCRIPT_DIR/build/cloudfront_output.yml

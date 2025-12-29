@@ -34,20 +34,6 @@
         fail_msg: "Missing required env vars: 'frontend_stack_name', 'bucket_name', 'region', and/or AWS credentials."
 
   tasks:
-    - name: Run shell commands
-      ansible.builtin.shell: |
-        aws cloudformation create-change-set \
-          --stack-name {{ frontend_stack_name }} \
-          --change-set-name import-existing \
-          --change-set-type IMPORT \
-          --template-body file://{{ template_path }} \
-          --resources-to-import file://{{ playbook_dir }}/../import.json \
-          --region {{ region }}
-      environment:
-        AWS_ACCESS_KEY_ID: "{{ aws_access_key_id }}"
-        AWS_SECRET_ACCESS_KEY: "{{ aws_secret_access_key }}"
-      register: changeset_output    
-
     - name: Deploy CloudFormation stack
       amazon.aws.cloudformation:
         stack_name: "{{ frontend_stack_name }}"

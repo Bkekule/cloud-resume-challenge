@@ -19,7 +19,7 @@
 
     - name: Load backend prerequisites environment vars
       ansible.builtin.include_vars:
-        file: "{{ [playbook_dir, 'environment', 'backend', 'env-backend-prerequisites.yml'] | path_join }}"
+        file: "{{ [playbook_dir, 'environment', 'backend', 'env-prerequisites.yml'] | path_join }}"
 
     - name: Load view counter environment vars
       ansible.builtin.include_vars:
@@ -33,18 +33,17 @@
       ansible.builtin.assert:
         that:
           - region is defined
-          - bucket_name is defined
           - aws_access_key_id is defined
           - aws_secret_access_key is defined
           - artifact_bucket_name is defined
-          - backend_view_counter_stack_name
-          - backend_stack_name
-          - view_counter_table_name
-          - view_counter_function_name
-        fail_msg: "Missing required vars: 'region', 'bucket_name', 'artifact_bucket_name', 'backend_view_counter_stack_name', 'backend_stack_name', 'view_counter_table_name', 'view_counter_function_name', and/or AWS credentials."
+          - backend_view_counter_stack_name is defined
+          - backend_stack_name is defined
+          - view_counter_table_name is defined
+          - view_counter_function_name is defined
+        fail_msg: "Missing required vars: 'region', 'artifact_bucket_name', 'backend_view_counter_stack_name', 'backend_stack_name', 'view_counter_table_name', 'view_counter_function_name', and/or AWS credentials."
 
   tasks:
-    - name: Deploy CloudFormation stack for backedn prerequisites
+    - name: Deploy CloudFormation stack for backend prerequisites
       amazon.aws.cloudformation:
         stack_name: "{{ backend_stack_name }}"
         state: present
@@ -60,12 +59,6 @@
       ansible.builtin.debug:
         var: cf_output
 
-    - name: SAM validate (template syntax)
-      ansible.builtin.command:
-        cmd: sam validate -t "{{ template_path }}"
-        chdir: "{{ aws_folder }}"
-      changed_when: false
-
     - name: Install SAM CLI if not present
       ansible.builtin.shell: |
         if ! command -v sam &> /dev/null; then
@@ -73,9 +66,15 @@
         fi
       changed_when: false
 
+    - name: SAM validate (template syntax)
+      ansible.builtin.command:
+        cmd: sam validate -t "{{ template_path }}" --region "{{ region }}"
+        chdir: "{{ aws_folder }}"
+      changed_when: false
+
     - name: SAM build (use project template)
       ansible.builtin.command:
-        cmd: sam build -t "{{ template_path }}"
+        cmd: sam build -t "{{ template_path }}" --region "{{ region }}"
         chdir: "{{ aws_folder }}"
 
     - name: SAM deploy (non-interactive)
@@ -92,6 +91,7 @@
           --parameter-overrides
           TableNameParameter="{{ view_counter_table_name }}"
           FunctionNameParameter="{{ view_counter_function_name }}"
+          ENV="{{ env }}"
         chdir: "{{ aws_folder }}"
       environment:
         AWS_ACCESS_KEY_ID: "{{ aws_access_key_id }}"
@@ -108,4 +108,4 @@
 
     - name: Show backend stack outputs
       ansible.builtin.debug:
-        var: backend_stack_info.stacks[0].outputs
+        var: backend_stack_info.cloudformation[backend_view_counter_stack_name].stack_outputs

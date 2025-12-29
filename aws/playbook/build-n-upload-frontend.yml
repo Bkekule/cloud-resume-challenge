@@ -61,7 +61,7 @@
 
     - name: Build frontend
       ansible.builtin.command:
-        cmd: npm run build
+        cmd: npm run build:{{ env }}
         chdir: "{{ frontend_dir }}"
 
     - name: Ensure build directory exists
