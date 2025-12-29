@@ -1,0 +1,111 @@
+---
+- name: Deploy SAM backend (view counter)
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  vars:
+    env: dev
+    template_path: "{{ [playbook_dir, '..', 'backend-viewcounter.yml'] | path_join }}"
+    backend_prerequisites_path: "{{ [playbook_dir, '..', 'backend-prerequisites.yml'] | path_join }}"
+    aws_folder: "{{ [playbook_dir, '..'] | path_join }}"
+
+  pre_tasks:
+    - name: Validate environment selection
+      ansible.builtin.assert:
+        that:
+          - env in ['dev', 'qa', 'prod']
+        fail_msg: "Invalid env '{{ env }}'. Use dev, qa, or prod."
+
+    - name: Load backend prerequisites environment vars
+      ansible.builtin.include_vars:
+        file: "{{ [playbook_dir, 'environment', 'backend', 'env-backend-prerequisites.yml'] | path_join }}"
+
+    - name: Load view counter environment vars
+      ansible.builtin.include_vars:
+        file: "{{ [playbook_dir, 'environment', 'backend', 'env-view-counter.yml'] | path_join }}"
+
+    - name: Load vault vars
+      ansible.builtin.include_vars:
+        file: "{{ [playbook_dir, 'environment', 'vault.yml'] | path_join }}"
+
+    - name: Assert required vars exist
+      ansible.builtin.assert:
+        that:
+          - region is defined
+          - bucket_name is defined
+          - aws_access_key_id is defined
+          - aws_secret_access_key is defined
+          - artifact_bucket_name is defined
+          - backend_view_counter_stack_name
+          - backend_stack_name
+          - view_counter_table_name
+          - view_counter_function_name
+        fail_msg: "Missing required vars: 'region', 'bucket_name', 'artifact_bucket_name', 'backend_view_counter_stack_name', 'backend_stack_name', 'view_counter_table_name', 'view_counter_function_name', and/or AWS credentials."
+
+  tasks:
+    - name: Deploy CloudFormation stack for backedn prerequisites
+      amazon.aws.cloudformation:
+        stack_name: "{{ backend_stack_name }}"
+        state: present
+        region: "{{ region }}"
+        template: "{{ backend_prerequisites_path }}"
+        template_parameters:
+          ArtifactBucketName: "{{ artifact_bucket_name }}"
+        aws_access_key_id: "{{ aws_access_key_id }}"
+        aws_secret_access_key: "{{ aws_secret_access_key }}"
+      register: cf_output
+
+    - name: Display prerequisites stack output
+      ansible.builtin.debug:
+        var: cf_output
+
+    - name: SAM validate (template syntax)
+      ansible.builtin.command:
+        cmd: sam validate -t "{{ template_path }}"
+        chdir: "{{ aws_folder }}"
+      changed_when: false
+
+    - name: Install SAM CLI if not present
+      ansible.builtin.shell: |
+        if ! command -v sam &> /dev/null; then
+          pip install aws-sam-cli
+        fi
+      changed_when: false
+
+    - name: SAM build (use project template)
+      ansible.builtin.command:
+        cmd: sam build -t "{{ template_path }}"
+        chdir: "{{ aws_folder }}"
+
+    - name: SAM deploy (non-interactive)
+      ansible.builtin.command:
+        cmd: >-
+          sam deploy
+          --template-file .aws-sam/build/template.yaml
+          --stack-name "{{ backend_view_counter_stack_name }}"
+          --s3-bucket "{{ artifact_bucket_name }}"
+          --capabilities CAPABILITY_IAM
+          --region "{{ region }}"
+          --no-confirm-changeset
+          --no-fail-on-empty-changeset
+          --parameter-overrides
+          TableNameParameter="{{ view_counter_table_name }}"
+          FunctionNameParameter="{{ view_counter_function_name }}"
+        chdir: "{{ aws_folder }}"
+      environment:
+        AWS_ACCESS_KEY_ID: "{{ aws_access_key_id }}"
+        AWS_SECRET_ACCESS_KEY: "{{ aws_secret_access_key }}"
+        AWS_DEFAULT_REGION: "{{ region }}"
+
+    - name: Fetch CloudFormation stack info
+      amazon.aws.cloudformation_info:
+        stack_name: "{{ backend_view_counter_stack_name }}"
+        region: "{{ region }}"
+        aws_access_key: "{{ aws_access_key_id }}"
+        aws_secret_key: "{{ aws_secret_access_key }}"
+      register: backend_stack_info
+
+    - name: Show backend stack outputs
+      ansible.builtin.debug:
+        var: backend_stack_info.stacks[0].outputs

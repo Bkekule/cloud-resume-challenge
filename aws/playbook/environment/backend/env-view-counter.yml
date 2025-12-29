@@ -1,0 +1,3 @@
+backend_view_counter_stack_name: "cloud-resume-challenge-backend-viewcounter-{{ env }}"
+view_counter_table_name: "cloud-resume-view-counter-table-{{ env }}"
+view_counter_function_name: "cloud-resume-view-counter-function-{{ env }}"

@@ -18,7 +18,7 @@
 
     - name: Load environment vars
       ansible.builtin.include_vars:
-        file: "{{ [playbook_dir, 'environment', 'env.yml'] | path_join }}"
+        file: "{{ [playbook_dir, 'environment', 'frontend', 'env.yml'] | path_join }}"
 
     - name: Load vault vars
       ansible.builtin.include_vars:

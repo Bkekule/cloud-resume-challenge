@@ -5,6 +5,6 @@ env=${env:-dev}
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CLOUDFRONT_OUTPUT_INFO=/tmp/cloudfront_output.yml
 ansible-galaxy collection install -r "$SCRIPT_DIR/../playbook/requirements.yml"
-ansible-playbook "$SCRIPT_DIR/../playbook/build_n_upload.yml" -e env=$env -e @${CLOUDFRONT_OUTPUT_INFO} --ask-vault-pass
+ansible-playbook "$SCRIPT_DIR/../playbook/build-n-upload-frontend.yml" -e env=$env -e @${CLOUDFRONT_OUTPUT_INFO} --ask-vault-pass
 
 sudo rm $CLOUDFRONT_OUTPUT_INFO

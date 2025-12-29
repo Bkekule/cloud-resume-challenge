@@ -1,0 +1,2 @@
+artifact_bucket_name: "cloud-resume-challenge-deploy-artifacts-{{ env }}"
+backend_stack_name: "cloud-resume-challenge-backend-{{ env }}"

@@ -17,7 +17,7 @@
 
     - name: Load environment vars
       ansible.builtin.include_vars:
-        file: "{{ [playbook_dir, 'environment', 'env.yml'] | path_join }}"
+        file: "{{ [playbook_dir, 'environment', 'frontend', 'env.yml'] | path_join }}"
 
     - name: Load vault vars
       ansible.builtin.include_vars:
@@ -26,15 +26,17 @@
     - name: Assert required vars exist
       ansible.builtin.assert:
         that:
-          - stack_name is defined
+          - frontend_stack_name is defined
           - region is defined
           - bucket_name is defined
-        fail_msg: "Missing required env vars: 'stack_name', 'bucket_name', and/or 'region'"
+          - aws_access_key_id is defined
+          - aws_secret_access_key is defined
+        fail_msg: "Missing required env vars: 'frontend_stack_name', 'bucket_name', 'region', and/or AWS credentials."
 
   tasks:
     - name: Deploy CloudFormation stack
       amazon.aws.cloudformation:
-        stack_name: "{{ stack_name }}"
+        stack_name: "{{ frontend_stack_name }}"
         state: present
         region: "{{ region }}"
         template: "{{ template_path }}"
