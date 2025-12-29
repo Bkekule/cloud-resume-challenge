@@ -1,4 +1,4 @@
-backend_view_counter_stack_name: "cloud-resume-challenge-backend-viewcounter-{{ env }}"
+backend_view_counter_stack_name: "cloud-resume-challenge-backend-view-counter-{{ env }}"
 view_counter_table_name: "cloud-resume-view-counter-table-{{ env }}"
 view_counter_function_name: "cloud-resume-view-counter-function-{{ env }}"
-webpage_origin_url: "{{ 'https://d1mzdny8uxxfaq.cloudfront.net' if env == 'dev' else 'https://d3w46gw378xeix.cloudfront.net' }}"
+webpage_origin_url: "{{ 'https://d1mzdny8uxxfaq.cloudfront.net' if env == 'dev' else 'https://borisatudn.online' }}"

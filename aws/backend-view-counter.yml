@@ -67,20 +67,20 @@ Resources:
             StageName: !Ref ENV
             TracingEnabled: true
             Cors:
-                AllowOrigin: !Sub "'${WebPageOrigin}'"
+                AllowOrigin: "'*'"
                 AllowMethods: "'GET,POST,OPTIONS'"
                 AllowHeaders: "'Content-Type,Authorization'"
             GatewayResponses:
                 DEFAULT_4XX:
                     ResponseParameters:
                         Headers:
-                            Access-Control-Allow-Origin: !Sub "'${WebPageOrigin}'"
+                            Access-Control-Allow-Origin: "'*'"
                             Access-Control-Allow-Methods: "'GET,POST,OPTIONS'"
                             Access-Control-Allow-Headers: "'Content-Type,Authorization'"
                 DEFAULT_5XX:
                     ResponseParameters:
                         Headers:
-                            Access-Control-Allow-Origin: !Sub "'${WebPageOrigin}'"
+                            Access-Control-Allow-Origin: "'*'"
                             Access-Control-Allow-Methods: "'GET,POST,OPTIONS'"
                             Access-Control-Allow-Headers: "'Content-Type,Authorization'"
 
