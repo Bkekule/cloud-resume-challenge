@@ -17,6 +17,14 @@
           - env in ['dev', 'qa', 'prod']
         fail_msg: "Invalid env '{{ env }}'. Use dev, qa, or prod."
 
+    - name: Load shared environment vars
+      ansible.builtin.include_vars:
+        file: "{{ [playbook_dir, 'environment', 'common', 'env.yml'] | path_join }}"
+
+    - name: Load frontend environment vars
+      ansible.builtin.include_vars:
+        file: "{{ [playbook_dir, 'environment', 'frontend', 'env.yml'] | path_join }}"
+
     - name: Load backend prerequisites environment vars
       ansible.builtin.include_vars:
         file: "{{ [playbook_dir, 'environment', 'backend', 'env-prerequisites.yml'] | path_join }}"
@@ -40,8 +48,21 @@
           - backend_stack_name is defined
           - view_counter_table_name is defined
           - view_counter_function_name is defined
-          - webpage_origin_url is defined
-        fail_msg: "Missing required vars: 'region', 'artifact_bucket_name', 'backend_view_counter_stack_name', 'backend_stack_name', 'view_counter_table_name', 'view_counter_function_name', 'webpage_origin_url', and/or AWS credentials."
+          - frontend_stack_name is defined
+          - view_counter_api_endpoint is defined
+        fail_msg: "Missing required vars: 'region', 'artifact_bucket_name', 'backend_view_counter_stack_name', 'backend_stack_name', 'view_counter_table_name', 'view_counter_function_name', 'frontend_stack_name', 'view_counter_api_endpoint', and/or AWS credentials."
+
+    - name: Get frontend stack outputs
+      amazon.aws.cloudformation_info:
+        stack_name: "{{ frontend_stack_name }}"
+        region: "{{ region }}"
+        aws_access_key_id: "{{ aws_access_key_id }}"
+        aws_secret_access_key: "{{ aws_secret_access_key }}"
+      register: frontend_stack_info
+
+    - name: Set webpage_origin_url from frontend stack
+      ansible.builtin.set_fact:
+        webpage_origin_url: "{{ frontend_stack_info.cloudformation[frontend_stack_name].stack_outputs.WebsiteServerDomainName }}"
 
   tasks:
     - name: Deploy CloudFormation stack for backend prerequisites
@@ -93,6 +114,7 @@
           TableNameParameter="{{ view_counter_table_name }}"
           FunctionNameParameter="{{ view_counter_function_name }}"
           WebPageOrigin="{{ webpage_origin_url }}"
+          ViewCounterEndpoint="{{ view_counter_api_endpoint }}"
           ENV="{{ env }}"
         chdir: "{{ aws_folder }}"
       environment:

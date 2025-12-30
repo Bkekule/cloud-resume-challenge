@@ -74,14 +74,14 @@ Resources:
   ACMCertificate:
     Type: AWS::CertificateManager::Certificate
     Condition: HasCustomDomain
+    UpdateReplacePolicy: Retain
+    DeletionPolicy: Retain
     Properties:
       DomainName: !Ref CustomDomain
       SubjectAlternativeNames:
         - !Sub "*.${CustomDomain}"
       DomainValidationOptions:
         - DomainName: !Ref CustomDomain
-          HostedZoneId: !Ref HostedZoneId
-        - DomainName: !Sub "*.${CustomDomain}"
           HostedZoneId: !Ref HostedZoneId
       ValidationMethod: DNS
 
@@ -161,10 +161,6 @@ Outputs:
     Description: CloudFront distribution ID
     Value: !Ref CloudFrontDistribution
 
-  CloudFrontDistributionArn:
-    Description: CloudFront distribution ARN
-    Value: !Sub "arn:aws:cloudfront::${AWS::AccountId}:distribution/${CloudFrontDistribution}"
-
-  CloudFrontDomainName:
+  WebsiteServerDomainName:
     Description: CloudFront distribution domain name
-    Value: !GetAtt CloudFrontDistribution.DomainName
+    Value: !If [HasCustomDomain, !Sub "https://${CustomDomain}", !Sub "https://${CloudFrontDistribution.DomainName}"]

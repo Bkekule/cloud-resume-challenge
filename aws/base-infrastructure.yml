@@ -18,13 +18,9 @@ Outputs:
   HostedZoneId:
     Description: Route53 Hosted Zone ID
     Value: !Ref HostedZone
-    Export:
-      Name: !Sub "${AWS::StackName}-HostedZoneId"
 
   NameServers:
     Description: Name servers for the hosted zone
     Value: !Join
       - ", "
       - !GetAtt HostedZone.NameServers
-    Export:
-      Name: !Sub "${AWS::StackName}-NameServers"

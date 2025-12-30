@@ -14,7 +14,7 @@
           - env in ['qa', 'prod']
         fail_msg: "Invalid env '{{ env }}'. Use qa or prod."
 
-    - name: Load environment vars
+    - name: Load shared environment vars
       ansible.builtin.include_vars:
         file: "{{ [playbook_dir, 'environment', 'common', 'env.yml'] | path_join }}"
 
@@ -48,9 +48,3 @@
     - name: Display stack outputs
       ansible.builtin.debug:
         var: cf_output
-
-    - name: Extract and display hosted zone ID
-      ansible.builtin.debug:
-        msg: |
-          Hosted Zone ID: {{ cf_output.stack_outputs.HostedZoneId }}
-          Name Servers: {{ cf_output.stack_outputs.NameServers }}

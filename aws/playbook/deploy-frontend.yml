@@ -15,7 +15,7 @@
           - env in ['dev', 'qa', 'prod']
         fail_msg: "Invalid env '{{ env }}'. Use dev, qa, or prod."
 
-    - name: Load common environment vars
+    - name: Load shared environment vars
       ansible.builtin.include_vars:
         file: "{{ [playbook_dir, 'environment', 'common', 'env.yml'] | path_join }}"
 
@@ -36,7 +36,20 @@
           - aws_access_key_id is defined
           - aws_secret_access_key is defined
           - domain_name is defined
-        fail_msg: "Missing required env vars: 'frontend_stack_name', 'bucket_name', 'region', 'domain_name', and/or AWS credentials."
+          - base_infrastructure_stack_name is defined
+        fail_msg: "Missing required env vars: 'frontend_stack_name', 'bucket_name', 'region', 'domain_name', 'base_infrastructure_stack_name', and/or AWS credentials."
+
+    - name: Get base infrastructure stack outputs
+      amazon.aws.cloudformation_info:
+        stack_name: "{{ base_infrastructure_stack_name }}"
+        region: "{{ region }}"
+        aws_access_key_id: "{{ aws_access_key_id }}"
+        aws_secret_access_key: "{{ aws_secret_access_key }}"
+      register: base_stack_info
+
+    - name: Set hosted_zone_id from base stack
+      ansible.builtin.set_fact:
+        hosted_zone_id: "{{ base_stack_info.cloudformation[base_infrastructure_stack_name].stack_outputs.HostedZoneId }}"
 
   tasks:
     - name: Deploy CloudFormation stack

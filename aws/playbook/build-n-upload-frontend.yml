@@ -16,7 +16,7 @@
           - env in ['dev', 'qa', 'prod']
         fail_msg: "Invalid env '{{ env }}'. Use dev, qa, or prod."
 
-    - name: Load environment vars
+    - name: Load frontend environment vars
       ansible.builtin.include_vars:
         file: "{{ [playbook_dir, 'environment', 'frontend', 'env.yml'] | path_join }}"
 
@@ -29,11 +29,23 @@
         that:
           - bucket_name is defined
           - region is defined
-          - cloudfront_distribution_id is defined
+          - frontend_stack_name is defined
           - aws_access_key_id is defined
           - aws_secret_access_key is defined
-        fail_msg: "Missing required vars: 'bucket_name', 'region', 'cloudfront_distribution_id', and/or AWS credentials"
+        fail_msg: "Missing required vars: 'bucket_name', 'region', 'frontend_stack_name', and/or AWS credentials"
         quiet: false
+
+    - name: Get frontend stack outputs
+      amazon.aws.cloudformation_info:
+        stack_name: "{{ frontend_stack_name }}"
+        region: "{{ region }}"
+        aws_access_key_id: "{{ aws_access_key_id }}"
+        aws_secret_access_key: "{{ aws_secret_access_key }}"
+      register: frontend_stack_info
+
+    - name: Set cloudfront_distribution_id from frontend stack
+      ansible.builtin.set_fact:
+        cloudfront_distribution_id: "{{ frontend_stack_info.cloudformation[frontend_stack_name].stack_outputs.CloudFrontDistributionId }}"
 
   tasks:
     - name: Ensure Node.js is available
