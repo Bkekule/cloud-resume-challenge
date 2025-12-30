@@ -2,6 +2,11 @@
 
 env=${env:-dev}
 
+if [ "$env" = "qa" ]; then
+  echo "QA environment is not yet supported (only dev or prod). Explicitly specify evironment: e.g. env=prod."
+  exit 1
+fi
+
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CLOUDFRONT_OUTPUT_INFO=$SCRIPT_DIR/build/cloudfront_output.yml
 ansible-galaxy collection install -r "$SCRIPT_DIR/../playbook/requirements.yml"

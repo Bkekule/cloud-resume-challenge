@@ -1,27 +1,22 @@
 ---
-- name: Deploy CloudFormation Stack
+- name: Deploy Base Infrastructure (Route53 Hosted Zone)
   hosts: localhost
   connection: local
   gather_facts: false
 
   vars:
-    env: dev
-    template_path: "{{ [playbook_dir, '..', 'frontend.yml'] | path_join }}"
+    template_path: "{{ [playbook_dir, '..', 'base-infrastructure.yml'] | path_join }}"
 
   pre_tasks:
     - name: Validate environment selection
       ansible.builtin.assert:
         that:
-          - env in ['dev', 'qa', 'prod']
-        fail_msg: "Invalid env '{{ env }}'. Use dev, qa, or prod."
+          - env in ['qa', 'prod']
+        fail_msg: "Invalid env '{{ env }}'. Use qa or prod."
 
-    - name: Load common environment vars
+    - name: Load environment vars
       ansible.builtin.include_vars:
         file: "{{ [playbook_dir, 'environment', 'common', 'env.yml'] | path_join }}"
-
-    - name: Load frontend environment vars
-      ansible.builtin.include_vars:
-        file: "{{ [playbook_dir, 'environment', 'frontend', 'env.yml'] | path_join }}"
 
     - name: Load vault vars
       ansible.builtin.include_vars:
@@ -30,25 +25,22 @@
     - name: Assert required vars exist
       ansible.builtin.assert:
         that:
-          - frontend_stack_name is defined
+          - base_infrastructure_stack_name is defined
+          - domain_name is defined
           - region is defined
-          - bucket_name is defined
           - aws_access_key_id is defined
           - aws_secret_access_key is defined
-          - domain_name is defined
-        fail_msg: "Missing required env vars: 'frontend_stack_name', 'bucket_name', 'region', 'domain_name', and/or AWS credentials."
+        fail_msg: "Missing required env vars: 'base_infrastructure_stack_name', 'domain_name', 'region', and/or AWS credentials."
 
   tasks:
     - name: Deploy CloudFormation stack
       amazon.aws.cloudformation:
-        stack_name: "{{ frontend_stack_name }}"
+        stack_name: "{{ base_infrastructure_stack_name }}"
         state: present
         region: "{{ region }}"
         template: "{{ template_path }}"
         template_parameters:
-          BucketName: "{{ bucket_name }}"
-          CustomDomain: "{{ domain_name }}"
-          HostedZoneId: "{{ hosted_zone_id }}"
+          DomainName: "{{ domain_name }}"
         aws_access_key_id: "{{ aws_access_key_id }}"
         aws_secret_access_key: "{{ aws_secret_access_key }}"
       register: cf_output
@@ -56,3 +48,9 @@
     - name: Display stack outputs
       ansible.builtin.debug:
         var: cf_output
+
+    - name: Extract and display hosted zone ID
+      ansible.builtin.debug:
+        msg: |
+          Hosted Zone ID: {{ cf_output.stack_outputs.HostedZoneId }}
+          Name Servers: {{ cf_output.stack_outputs.NameServers }}

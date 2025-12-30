@@ -77,11 +77,11 @@ Resources:
     Properties:
       DomainName: !Ref CustomDomain
       SubjectAlternativeNames:
-        - !Sub "www.${CustomDomain}"
+        - !Sub "*.${CustomDomain}"
       DomainValidationOptions:
         - DomainName: !Ref CustomDomain
           HostedZoneId: !Ref HostedZoneId
-        - DomainName: !Sub "www.${CustomDomain}"
+        - DomainName: !Sub "*.${CustomDomain}"
           HostedZoneId: !Ref HostedZoneId
       ValidationMethod: DNS
 

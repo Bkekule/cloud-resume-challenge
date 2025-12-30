@@ -1,0 +1,30 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Route53 hosted zone for cloud resume challenge
+
+Parameters:
+  DomainName:
+    Type: String
+    Description: Domain name for the hosted zone (e.g., borisatudn.online)
+
+Resources:
+  HostedZone:
+    Type: AWS::Route53::HostedZone
+    Properties:
+      Name: !Ref DomainName
+      HostedZoneConfig:
+        Comment: Hosted zone for cloud resume challenge
+
+Outputs:
+  HostedZoneId:
+    Description: Route53 Hosted Zone ID
+    Value: !Ref HostedZone
+    Export:
+      Name: !Sub "${AWS::StackName}-HostedZoneId"
+
+  NameServers:
+    Description: Name servers for the hosted zone
+    Value: !Join
+      - ", "
+      - !GetAtt HostedZone.NameServers
+    Export:
+      Name: !Sub "${AWS::StackName}-NameServers"

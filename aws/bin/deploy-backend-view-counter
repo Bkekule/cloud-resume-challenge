@@ -1,6 +1,10 @@
 #! /usr/bin/env bash
 env=${env:-dev}
 
+if [ "$env" = "qa" ]; then
+  echo "QA environment is not yet supported (only dev or prod). Explicitly specify evironment: e.g. env=prod."
+  exit 1
+fi
+
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-RESULTS_FILE=/tmp/result.json
 ansible-playbook "$SCRIPT_DIR/../playbook/deploy-backend-view-counter.yml" -e env=$env --ask-vault-pass

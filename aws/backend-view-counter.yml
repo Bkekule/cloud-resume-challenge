@@ -1,93 +1,100 @@
-AWSTemplateFormatVersion: '2010-09-09'
+AWSTemplateFormatVersion: "2010-09-09"
 Transform: AWS::Serverless-2016-10-31
 Description: SAM template for view counter backend with API Gateway, Lambda, and DynamoDB
 
 Parameters:
-    TableNameParameter:
-        Type: String
-        Description: Name of the DynamoDB table
-    FunctionNameParameter:
-        Type: String
-        Description: Name of the Lambda function
-    WebPageOrigin:
-        Type: String
-        Description: Origin hosting the webpage making calls to ViewCounter endpoint
-    ENV:
-        Type: String
-        Description: Staging Environment
+  TableNameParameter:
+    Type: String
+    Description: Name of the DynamoDB table
+  FunctionNameParameter:
+    Type: String
+    Description: Name of the Lambda function
+  WebPageOrigin:
+    Type: String
+    Description: Origin hosting the webpage making calls to ViewCounter endpoint
+  ViewCounterEndpoint:
+    Type: String
+    Description: Consumer endpoint for view counter. Used by Frontend.
+  ENV:
+    Type: String
+    Description: Staging Environment
 
 Globals:
-    Function:
-        Timeout: 30
-        Runtime: python3.12
-        Environment:
-            Variables:
-                TABLE_NAME: !Ref ViewCounterTable
-                WEB_PAGE_ORIGIN: !Ref WebPageOrigin
+  Function:
+    Timeout: 30
+    Runtime: python3.12
+    Environment:
+      Variables:
+        TABLE_NAME: !Ref ViewCounterTable
+        WEB_PAGE_ORIGIN: !Ref WebPageOrigin
 
 Resources:
-    ViewCounterTable:
-        Type: AWS::DynamoDB::Table
-        Properties:
-            TableName: !Ref TableNameParameter
-            BillingMode: PAY_PER_REQUEST
-            AttributeDefinitions:
-                - AttributeName: page_id
-                  AttributeType: S
-            KeySchema:
-                - AttributeName: page_id
-                  KeyType: HASH
+  ViewCounterTable:
+    Type: AWS::DynamoDB::Table
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      TableName: !Ref TableNameParameter
+      BillingMode: PAY_PER_REQUEST
+      SSESpecification:
+        SSEEnabled: true
+      AttributeDefinitions:
+        - AttributeName: page_id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: page_id
+          KeyType: HASH
 
-    ViewCounterFunction:
-        Type: AWS::Serverless::Function
-        Properties:
-            FunctionName: !Ref FunctionNameParameter
-            CodeUri: functions/
-            Handler: view-counter-function.lambda_handler
-            Policies:
-                - DynamoDBCrudPolicy:
-                        TableName: !Ref ViewCounterTable
-            Events:
-                GetViewCount:
-                    Type: Api
-                    Properties:
-                        RestApiId: !Ref ViewCounterApi
-                        Path: /views/{page_id}
-                        Method: GET
-                UpdateViewCount:
-                    Type: Api
-                    Properties:
-                        RestApiId: !Ref ViewCounterApi
-                        Path: /views/{page_id}
-                        Method: POST
+  ViewCounterFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Ref FunctionNameParameter
+      CodeUri: functions/
+      Handler: view-counter-function.lambda_handler
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref ViewCounterTable
+      Events:
+        GetViewCount:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ViewCounterApi
+            Path: /views/{page_id}
+            Method: GET
+        UpdateViewCount:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ViewCounterApi
+            Path: /views/{page_id}
+            Method: POST
 
-    ViewCounterApi:
-        Type: AWS::Serverless::Api
-        Properties:
-            StageName: !Ref ENV
-            TracingEnabled: true
-            Cors:
-                AllowOrigin: "'*'"
-                AllowMethods: "'GET,POST,OPTIONS'"
-                AllowHeaders: "'Content-Type,Authorization'"
-            GatewayResponses:
-                DEFAULT_4XX:
-                    ResponseParameters:
-                        Headers:
-                            Access-Control-Allow-Origin: "'*'"
-                            Access-Control-Allow-Methods: "'GET,POST,OPTIONS'"
-                            Access-Control-Allow-Headers: "'Content-Type,Authorization'"
-                DEFAULT_5XX:
-                    ResponseParameters:
-                        Headers:
-                            Access-Control-Allow-Origin: "'*'"
-                            Access-Control-Allow-Methods: "'GET,POST,OPTIONS'"
-                            Access-Control-Allow-Headers: "'Content-Type,Authorization'"
+  ViewCounterApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: !Ref ENV
+      TracingEnabled: true
+      Cors:
+        AllowOrigin: "'*'"
+        AllowMethods: "'GET,POST,OPTIONS'"
+        AllowHeaders: "'Content-Type,Authorization'"
+      GatewayResponses:
+        DEFAULT_4XX:
+          ResponseParameters:
+            Headers:
+              Access-Control-Allow-Origin: "'*'"
+              Access-Control-Allow-Methods: "'GET,POST,OPTIONS'"
+              Access-Control-Allow-Headers: "'Content-Type,Authorization'"
+        DEFAULT_5XX:
+          ResponseParameters:
+            Headers:
+              Access-Control-Allow-Origin: "'*'"
+              Access-Control-Allow-Methods: "'GET,POST,OPTIONS'"
+              Access-Control-Allow-Headers: "'Content-Type,Authorization'"
 
 Outputs:
-    ApiEndpoint:
-        Description: API Gateway endpoint
-        Value: !Sub 'https://${ViewCounterApi}.execute-api.${AWS::Region}.amazonaws.com/${ENV}'
-    TableName:
-        Description: DynamoDB table name
-        Value: !Ref ViewCounterTable
+  ApiEndpoint:
+    Description: API Gateway endpoint
+    Value: !Sub "https://${ViewCounterApi}.execute-api.${AWS::Region}.amazonaws.com/${ENV}"
+  TableName:
+    Description: DynamoDB table name
+    Value: !Ref ViewCounterTable

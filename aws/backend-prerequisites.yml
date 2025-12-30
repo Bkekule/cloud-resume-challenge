@@ -6,6 +6,7 @@ Parameters:
     Type: String
     Description: Name of the S3 bucket for SAM deployment artifacts
 
+# Prerequisites for ViewCounter Backend
 Resources:
   SAMArtifactBucket:
     Type: AWS::S3::Bucket
