@@ -3,10 +3,10 @@ Transform: AWS::Serverless-2016-10-31
 Description: SAM template for view counter backend with API Gateway, Lambda, and DynamoDB
 
 Parameters:
-  TableNameParameter:
+  TableName:
     Type: String
     Description: Name of the DynamoDB table
-  FunctionNameParameter:
+  FunctionName:
     Type: String
     Description: Name of the Lambda function
   WebPageOrigin:
@@ -25,7 +25,6 @@ Parameters:
     Type: String
     Description: Staging Environment
 
-
 Globals:
   Function:
     Timeout: 30
@@ -41,7 +40,7 @@ Resources:
     DeletionPolicy: Retain
     UpdateReplacePolicy: Retain
     Properties:
-      TableName: !Ref TableNameParameter
+      TableName: !Ref TableName
       BillingMode: PAY_PER_REQUEST
       SSESpecification:
         SSEEnabled: true
@@ -55,7 +54,7 @@ Resources:
   ViewCounterFunction:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: !Ref FunctionNameParameter
+      FunctionName: !Ref FunctionName
       CodeUri: functions/
       Handler: view-counter-function.lambda_handler
       Policies:

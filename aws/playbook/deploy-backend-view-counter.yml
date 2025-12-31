@@ -124,8 +124,8 @@
           --no-confirm-changeset
           --no-fail-on-empty-changeset
           --parameter-overrides
-          TableNameParameter="{{ view_counter_table_name }}"
-          FunctionNameParameter="{{ view_counter_function_name }}"
+          TableName="{{ view_counter_table_name }}"
+          FunctionName="{{ view_counter_function_name }}"
           WebPageOrigin="{{ webpage_origin_url }}"
           HostedZoneId="{{ hosted_zone_id }}"
           CertificateArn="{{ certificate_arn }}"
