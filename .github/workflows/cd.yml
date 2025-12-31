@@ -33,7 +33,7 @@ jobs:
           pip install -qr render_data/requirements.txt
 
       - name: Show environment name
-        run: echo "Environment: ${{ github.environment }}"
+        run: echo "Environment: ${{ github.environment.name }}"
 
       - name: Run render_data/tasks.py
         run: |
