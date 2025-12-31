@@ -21,9 +21,6 @@ Parameters:
   ViewCounterApiDomain:
     Type: String
     Description: Custom domain name for the View Counter API
-  ENV:
-    Type: String
-    Description: Staging Environment
 
 Globals:
   Function:
@@ -77,7 +74,6 @@ Resources:
   ViewCounterApi:
     Type: AWS::Serverless::Api
     Properties:
-      StageName: !Ref ENV
       TracingEnabled: true
       DisableExecuteApiEndpoint: true
       MethodSettings:
@@ -116,11 +112,9 @@ Resources:
 
   ViewCounterApiBasePathMapping:
     Type: AWS::ApiGateway::BasePathMapping
-    DependsOn: ViewCounterApi
     Properties:
       DomainName: !Ref ViewCounterApiCustomDomain
       RestApiId: !Ref ViewCounterApi
-      Stage: !Ref ENV
 
   ViewCounterApiDnsRecord:
     Type: AWS::Route53::RecordSet
