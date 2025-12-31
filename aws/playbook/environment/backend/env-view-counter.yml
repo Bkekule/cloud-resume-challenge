@@ -1,4 +1,4 @@
 backend_view_counter_stack_name: "cloud-resume-challenge-backend-view-counter-{{ env }}"
 view_counter_table_name: "cloud-resume-view-counter-table-{{ env }}"
 view_counter_function_name: "cloud-resume-view-counter-function-{{ env }}"
-view_counter_api_endpoint: "{% if env == 'prod' %}viewcounter-api.borisatudn.online{% else %}{{ env }}-viewcounter-api.borisatudn.online{% endif %}"
+view_counter_api_endpoint: "{% if env == 'prod' %}viewcounter-api.borisatudn.online{% else %}viewcounter-api.{{ env }}.borisatudn.online{% endif %}"

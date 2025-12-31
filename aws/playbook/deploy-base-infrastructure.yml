@@ -8,12 +8,6 @@
     template_path: "{{ [playbook_dir, '..', 'base-infrastructure.yml'] | path_join }}"
 
   pre_tasks:
-    - name: Validate environment selection
-      ansible.builtin.assert:
-        that:
-          - env in ['qa', 'prod']
-        fail_msg: "Invalid env '{{ env }}'. Use qa or prod."
-
     - name: Load shared environment vars
       ansible.builtin.include_vars:
         file: "{{ [playbook_dir, 'environment', 'common', 'env.yml'] | path_join }}"

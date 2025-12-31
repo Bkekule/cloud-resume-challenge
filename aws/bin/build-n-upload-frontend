@@ -2,11 +2,6 @@
 
 env=${env:-dev}
 
-if [ "$env" = "qa" ]; then
-  echo "QA environment is not yet supported (only dev or prod). Explicitly specify evironment: e.g. env=prod."
-  exit 1
-fi
-
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ansible-galaxy collection install -r "$SCRIPT_DIR/../playbook/requirements.yml"
 ansible-playbook "$SCRIPT_DIR/../playbook/build-n-upload-frontend.yml" -e env=$env --ask-vault-pass

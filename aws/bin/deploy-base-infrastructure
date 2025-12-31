@@ -1,9 +1,2 @@
-env=${env:-qa}
-
-if [ "$env" = "qa" ]; then
-  echo "QA environment is not yet supported. Explicitly specify prod evironment with env=prod."
-  exit 1
-fi
-
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-ansible-playbook "$SCRIPT_DIR/../playbook/deploy-base-infrastructure.yml" -e env=$env --ask-vault-pass
+ansible-playbook "$SCRIPT_DIR/../playbook/deploy-base-infrastructure.yml" --ask-vault-pass

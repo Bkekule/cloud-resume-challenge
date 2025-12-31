@@ -89,12 +89,8 @@ Resources:
         Comment: !Sub "CloudFront distribution for ${BucketName}"
         DefaultRootObject: index.html
         Aliases:
-          - !If [HasCustomDomain, !Ref CustomDomain, !Ref "AWS::NoValue"]
-          - !If [
-              HasCustomDomain,
-              !Sub "www.${CustomDomain}",
-              !Ref "AWS::NoValue",
-            ]
+          - !Ref CustomDomain
+          - !Sub "www.${CustomDomain}"
         Origins:
           - Id: S3Origin
             DomainName: !GetAtt S3Bucket.RegionalDomainName
@@ -121,12 +117,10 @@ Resources:
             ResponsePagePath: /index.html
             ResponseCode: "200"
             ErrorCachingMinTTL: 300
-        ViewerCertificate: !If
-          - HasCustomDomain
-          - AcmCertificateArn: !Ref ACMCertificate
-            SslSupportMethod: sni-only
-            MinimumProtocolVersion: TLSv1.2_2021
-          - CloudFrontDefaultCertificate: true
+        ViewerCertificate:
+          AcmCertificateArn: !Ref ACMCertificate
+          SslSupportMethod: sni-only
+          MinimumProtocolVersion: TLSv1.2_2021
 
   DnsRecordApex:
     Type: AWS::Route53::RecordSet

@@ -15,6 +15,10 @@
           - env in ['dev', 'qa', 'prod']
         fail_msg: "Invalid env '{{ env }}'. Use dev, qa, or prod."
 
+    - name: Load shared environment vars
+      ansible.builtin.include_vars:
+        file: "{{ [playbook_dir, 'environment', 'common', 'env.yml'] | path_join }}"
+
     - name: Load frontend environment vars
       ansible.builtin.include_vars:
         file: "{{ [playbook_dir, 'environment', 'frontend', 'env.yml'] | path_join }}"
