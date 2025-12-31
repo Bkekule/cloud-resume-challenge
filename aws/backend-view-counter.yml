@@ -21,6 +21,10 @@ Parameters:
   ViewCounterApiDomain:
     Type: String
     Description: Custom domain name for the View Counter API
+  Stage:
+    Type: String
+    Description: Stage name
+    Default: "prod"
 
 Globals:
   Function:
@@ -74,7 +78,7 @@ Resources:
   ViewCounterApi:
     Type: AWS::Serverless::Api
     Properties:
-      StageName: prod
+      StageName: !Ref Stage
       TracingEnabled: true
       DisableExecuteApiEndpoint: true
       MethodSettings:
@@ -116,7 +120,7 @@ Resources:
     Properties:
       DomainName: !Ref ViewCounterApiCustomDomain
       RestApiId: !Ref ViewCounterApi
-      Stage: prod
+      Stage: !Ref Stage
 
   ViewCounterApiDnsRecord:
     Type: AWS::Route53::RecordSet
