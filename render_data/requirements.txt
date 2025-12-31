@@ -1,4 +1,4 @@
 markdown
 invoke
-python-frotmatter
+python-frontmatter
 Pygments==2.19.2

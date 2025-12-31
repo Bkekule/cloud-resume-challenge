@@ -41,7 +41,7 @@ def convert_markdown_to_html(
 @task
 def convert_projects_markdown_to_html(
     c,
-    input_dir: Path = project_folder / "backend" / "data" / "projects", 
+    input_dir: Path = project_folder / "render_data" / "data" / "projects", 
     output_file: Path = project_folder / "frontend" / "src" / "data" / "projectsData.json",
     search_location: str = "*.md",
 ) -> None:
@@ -51,7 +51,7 @@ def convert_projects_markdown_to_html(
 @task
 def convert_blogs_markdown_to_html(
     c,
-    input_dir: Path = project_folder / "backend" / "data" / "blog", 
+    input_dir: Path = project_folder / "render_data" / "data" / "blog", 
     output_file: Path = project_folder / "frontend" / "src" / "data" / "blogsData.json",
     search_location: str = "**/*.md",
 ) -> None:
