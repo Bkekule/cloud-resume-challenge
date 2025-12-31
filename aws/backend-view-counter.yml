@@ -116,6 +116,7 @@ Resources:
 
   ViewCounterApiBasePathMapping:
     Type: AWS::ApiGateway::BasePathMapping
+    DependsOn: ViewCounterApi
     Properties:
       DomainName: !Ref ViewCounterApiCustomDomain
       RestApiId: !Ref ViewCounterApi
