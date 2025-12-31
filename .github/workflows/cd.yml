@@ -1,7 +1,7 @@
 name: CD Pipeline
 
 jobs:
-  deploy-production:
+  deploy-prod:
     if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
     uses: ./.github/workflows/deploy-template.yml
     with:
