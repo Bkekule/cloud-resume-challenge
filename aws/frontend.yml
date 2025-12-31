@@ -6,14 +6,11 @@ Parameters:
     Description: Name of the S3 bucket
   CustomDomain:
     Type: String
-    Description: Custom domain name (e.g., borisatudn.online)
+    Description: Custom domain name (e.g., dev.borisatudn.online for dev)
   HostedZoneId:
     Type: String
     Description: Route 53 hosted zone ID that serves the CustomDomain
-Conditions:
-  HasCustomDomain: !And
-    - !Not [!Equals [!Ref CustomDomain, ""]]
-    - !Not [!Equals [!Ref HostedZoneId, ""]]
+
 Resources:
   S3Bucket:
     Type: AWS::S3::Bucket
@@ -73,7 +70,6 @@ Resources:
 
   ACMCertificate:
     Type: AWS::CertificateManager::Certificate
-    Condition: HasCustomDomain
     UpdateReplacePolicy: Retain
     DeletionPolicy: Retain
     Properties:
@@ -134,7 +130,6 @@ Resources:
 
   DnsRecordApex:
     Type: AWS::Route53::RecordSet
-    Condition: HasCustomDomain
     Properties:
       HostedZoneId: !Ref HostedZoneId
       Name: !Ref CustomDomain
@@ -146,7 +141,6 @@ Resources:
 
   DnsRecordWww:
     Type: AWS::Route53::RecordSet
-    Condition: HasCustomDomain
     Properties:
       HostedZoneId: !Ref HostedZoneId
       Name: !Sub "www.${CustomDomain}"
@@ -163,9 +157,8 @@ Outputs:
 
   WebsiteServerDomainName:
     Description: CloudFront distribution domain name
-    Value: !If [HasCustomDomain, !Sub "https://${CustomDomain}", !Sub "https://${CloudFrontDistribution.DomainName}"]
+    Value: !Sub "https://${CustomDomain}"
 
   CertificateArn:
     Description: ARN of the ACM certificate
-    Condition: HasCustomDomain
     Value: !Ref ACMCertificate
