@@ -1,2 +1,2 @@
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-ansible-playbook "$SCRIPT_DIR/../playbook/deploy-base-infrastructure.yml"
+ansible-playbook "$SCRIPT_DIR/../playbook/deploy-base-infrastructure.yml" "$@" 

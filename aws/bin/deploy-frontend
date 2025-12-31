@@ -2,4 +2,4 @@
 env=${env:-dev}
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-ansible-playbook "$SCRIPT_DIR/../playbook/deploy-frontend.yml" -e env=$env
+ansible-playbook "$SCRIPT_DIR/../playbook/deploy-frontend.yml" -e env=$env "$@" 

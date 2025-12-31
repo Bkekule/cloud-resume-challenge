@@ -6,7 +6,8 @@ on:
       - main
     tags:
       - 'v*'
-    pull_request:
+  pull_request:
+    branches:
       - main
 
 jobs:
@@ -18,13 +19,7 @@ jobs:
       name: ${{
         (github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')) && 'production' ||
         (github.event_name == 'push' && github.ref == 'refs/heads/main') && 'quality-assurance' ||
-        (github.event_name == 'pull_request' && github.base_ref == 'refs/heads/main') && 'development' ||
-        ''
-      }}
-      ENV: ${{ 
-        (github.job.environment.name == 'production' && 'prod') ||
-        (github.job.environment.name == 'quality-assurance' && 'qa') ||
-        (github.job.environment.name == 'development' && 'dev') ||
+        (github.event_name == 'pull_request' && github.base_ref == 'main') && 'development' ||
         ''
       }}
     steps:
@@ -42,7 +37,10 @@ jobs:
           pip install -qr render_data/requirements.txt
 
       - name: Run render_data/tasks.py
-        run: python render_data/tasks.py
+        run: |
+          cd render_data
+          invoke convert-blogs-markdown-to-html
+          invoke convert-projects-markdown-to-html
 
       - name: Create Ansible Vault password file
         env:
@@ -52,16 +50,24 @@ jobs:
           chmod 600 .vault_pass
 
       - name: Deploy base infrastructure
-        run: env=$ENV aws/bin/deploy-base-infrastructure --vault-password-file .vault_pass
+        run: env=${{ env.ENV }} aws/bin/deploy-base-infrastructure --vault-password-file .vault_pass
 
       - name: Deploy frontend
-        run: env=$ENV aws/bin/deploy-frontend --vault-password-file .vault_pass
+        run: env=${{ env.ENV }} aws/bin/deploy-frontend --vault-password-file .vault_pass
 
       - name: Build and upload frontend
-        run: env=$ENV aws/bin/build-n-upload-frontend --vault-password-file .vault_pass
+        run: env=${{ env.ENV }} aws/bin/build-n-upload-frontend --vault-password-file .vault_pass
 
       - name: Deploy backend view counter
-        run: env=$ENV aws/bin/deploy-backend-view-counter --vault-password-file .vault_pass
+        run: env=${{ env.ENV }} aws/bin/deploy-backend-view-counter --vault-password-file .vault_pass
+
+      - name: Ensure shred is installed
+        if: always()
+        run: |
+          if ! command -v shred >/dev/null 2>&1; then
+            sudo apt-get update && sudo apt-get install -y coreutils
+          fi
 
       - name: Remove Ansible Vault password file
-        run: rm .vault_pass
+        if: always()
+        run: shred -u .vault_pass || rm -f .vault_pass
