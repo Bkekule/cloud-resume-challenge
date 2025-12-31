@@ -1,76 +1,26 @@
 name: CD Pipeline
 
-on:
-  push:
-    branches:
-      - main
-    tags:
-      - 'v*'
-  pull_request:
-    branches:
-      - main
-
 jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    env:
-      PYTHONUNBUFFERED: 1
-      ANSIBLE_PYTHON: /opt/pipx/venvs/ansible-core/bin/python
-    environment:
-      name: ${{ (github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')) && 'production' || (github.event_name == 'push' && github.ref == 'refs/heads/main') && 'quality-assurance' || (github.event_name == 'pull_request' && github.base_ref == 'main') && 'development' }}
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+  deploy-production:
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
+    uses: ./.github/workflows/deploy-template.yml
+    with:
+      environment: production
+    secrets:
+      ANSIBLE_VAULT_PASSWORD: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
 
-      - name: Setup Python 3.12
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
+  deploy-qa:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    uses: ./.github/workflows/deploy-template.yml
+    with:
+      environment: quality-assurance
+    secrets:
+      ANSIBLE_VAULT_PASSWORD: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
 
-      - name: Install Python dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -qr render_data/requirements.txt
-
-      - name: Show environment name
-        run: echo "Environment: ${{ github.environment.name }}"
-
-      - name: Run render_data/tasks.py
-        run: |
-          cd render_data
-          invoke convert-blogs-markdown-to-html
-          invoke convert-projects-markdown-to-html
-
-      - name: Install Ansible Python requirements
-        run: |
-          $ANSIBLE_PYTHON -m pip install -qr aws/bin/requirements.txt
-
-      - name: Create Ansible Vault password file
-        env:
-          ANSIBLE_VAULT_PASSWORD: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
-        run: |
-          echo "$ANSIBLE_VAULT_PASSWORD" > .vault_pass
-          chmod 600 .vault_pass
-
-      - name: Deploy base infrastructure
-        run: aws/bin/deploy-base-infrastructure --vault-password-file .vault_pass
-
-      - name: Deploy frontend
-        run: aws/bin/deploy-frontend -e env=${{ env.ENV }} --vault-password-file .vault_pass
-
-      - name: Build and upload frontend
-        run: aws/bin/build-n-upload-frontend -e env=${{ env.ENV }} --vault-password-file .vault_pass
-
-      - name: Deploy backend view counter
-        run: aws/bin/deploy-backend-view-counter -e env=${{ env.ENV }} --vault-password-file .vault_pass
-
-      - name: Ensure shred is installed
-        if: always()
-        run: |
-          if ! command -v shred >/dev/null 2>&1; then
-            sudo apt-get update && sudo apt-get install -y coreutils
-          fi
-
-      - name: Remove Ansible Vault password file
-        if: always()
-        run: shred -u .vault_pass || rm -f .vault_pass
+  deploy-dev:
+    if: github.event_name == 'pull_request' && github.base_ref == 'main'
+    uses: ./.github/workflows/deploy-template.yml
+    with:
+      environment: development
+    secrets:
+      ANSIBLE_VAULT_PASSWORD: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
