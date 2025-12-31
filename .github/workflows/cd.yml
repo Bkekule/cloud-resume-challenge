@@ -15,9 +15,9 @@ jobs:
     runs-on: ubuntu-latest
     env:
       PYTHONUNBUFFERED: 1
+      ANSIBLE_PYTHON: /opt/pipx/venvs/ansible-core/bin/python
     environment:
       name: ${{ (github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')) && 'production' || (github.event_name == 'push' && github.ref == 'refs/heads/main') && 'quality-assurance' || (github.event_name == 'pull_request' && github.base_ref == 'main') && 'development' }}
-      ANSIBLE_PYTHON: /opt/pipx/venvs/ansible-core/bin/python
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
