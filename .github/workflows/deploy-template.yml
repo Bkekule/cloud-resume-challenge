@@ -45,11 +45,11 @@ jobs:
       - name: Deploy base infrastructure
         run: aws/bin/deploy-base-infrastructure --vault-password-file .vault_pass
       - name: Deploy frontend
-        run: aws/bin/deploy-frontend -e env=${{ env.ENV }} --vault-password-file .vault_pass
+        run: aws/bin/deploy-frontend -e env=${{ vars.ENV }} --vault-password-file .vault_pass
       - name: Build and upload frontend
-        run: aws/bin/build-n-upload-frontend -e env=${{ env.ENV }} --vault-password-file .vault_pass
+        run: aws/bin/build-n-upload-frontend -e env=${{ vars.ENV }} --vault-password-file .vault_pass
       - name: Deploy backend view counter
-        run: aws/bin/deploy-backend-view-counter -e env=${{ env.ENV }} --vault-password-file .vault_pass
+        run: aws/bin/deploy-backend-view-counter -e env=${{ vars.ENV }} --vault-password-file .vault_pass
       - name: Ensure shred is installed
         if: always()
         run: |
