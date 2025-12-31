@@ -144,7 +144,3 @@
         aws_access_key: "{{ aws_access_key_id }}"
         aws_secret_key: "{{ aws_secret_access_key }}"
       register: backend_stack_info
-
-    - name: Show backend stack outputs
-      ansible.builtin.debug:
-        var: backend_stack_info.cloudformation[backend_view_counter_stack_name].stack_outputs
