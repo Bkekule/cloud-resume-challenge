@@ -2,5 +2,4 @@
 env=${env:-dev}
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-pip install -qr "$SCRIPT_DIR/requirements.txt"
 ansible-playbook "$SCRIPT_DIR/../playbook/deploy-backend-view-counter.yml" -e env=$env "$@" 

@@ -1,3 +1,2 @@
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-/opt/pipx/venvs/ansible-core/bin/python -m pip install -qr "$SCRIPT_DIR/requirements.txt"
 ansible-playbook "$SCRIPT_DIR/../playbook/deploy-base-infrastructure.yml" "$@" 

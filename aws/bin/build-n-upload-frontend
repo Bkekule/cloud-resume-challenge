@@ -3,6 +3,5 @@
 env=${env:-dev}
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-pip install -qr "$SCRIPT_DIR/requirements.txt"
 ansible-galaxy collection install -r "$SCRIPT_DIR/../playbook/requirements.yml"
 ansible-playbook "$SCRIPT_DIR/../playbook/build-n-upload-frontend.yml" -e env=$env "$@" 
