@@ -164,3 +164,8 @@ Outputs:
   WebsiteServerDomainName:
     Description: CloudFront distribution domain name
     Value: !If [HasCustomDomain, !Sub "https://${CustomDomain}", !Sub "https://${CloudFrontDistribution.DomainName}"]
+
+  CertificateArn:
+    Description: ARN of the ACM certificate
+    Condition: HasCustomDomain
+    Value: !Ref ACMCertificate

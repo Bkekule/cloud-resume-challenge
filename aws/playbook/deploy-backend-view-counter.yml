@@ -49,8 +49,20 @@
           - view_counter_table_name is defined
           - view_counter_function_name is defined
           - frontend_stack_name is defined
-          - view_counter_api_endpoint is defined
-        fail_msg: "Missing required vars: 'region', 'artifact_bucket_name', 'backend_view_counter_stack_name', 'backend_stack_name', 'view_counter_table_name', 'view_counter_function_name', 'frontend_stack_name', 'view_counter_api_endpoint', and/or AWS credentials."
+          - base_infrastructure_stack_name is defined
+        fail_msg: "Missing required vars: 'region', 'artifact_bucket_name', 'backend_view_counter_stack_name', 'backend_stack_name', 'view_counter_table_name', 'view_counter_function_name', 'frontend_stack_name', 'base_infrastructure_stack_name', and/or AWS credentials."
+
+    - name: Get base-infrastructure stack outputs
+      amazon.aws.cloudformation_info:
+        stack_name: "{{ base_infrastructure_stack_name }}"
+        region: "{{ region }}"
+        aws_access_key_id: "{{ aws_access_key_id }}"
+        aws_secret_access_key: "{{ aws_secret_access_key }}"
+      register: base_infrastructure_stack_info
+
+    - name: Set hosted_zone_id from base-infrastructure stack
+      ansible.builtin.set_fact:
+        hosted_zone_id: "{{ base_infrastructure_stack_info.cloudformation[base_infrastructure_stack_name].stack_outputs.HostedZoneId }}"
 
     - name: Get frontend stack outputs
       amazon.aws.cloudformation_info:
@@ -60,9 +72,10 @@
         aws_secret_access_key: "{{ aws_secret_access_key }}"
       register: frontend_stack_info
 
-    - name: Set webpage_origin_url from frontend stack
+    - name: Set webpage_origin_url and certificate_arn from frontend stack
       ansible.builtin.set_fact:
         webpage_origin_url: "{{ frontend_stack_info.cloudformation[frontend_stack_name].stack_outputs.WebsiteServerDomainName }}"
+        certificate_arn: "{{ frontend_stack_info.cloudformation[frontend_stack_name].stack_outputs.CertificateArn }}"
 
   tasks:
     - name: Deploy CloudFormation stack for backend prerequisites
@@ -114,7 +127,9 @@
           TableNameParameter="{{ view_counter_table_name }}"
           FunctionNameParameter="{{ view_counter_function_name }}"
           WebPageOrigin="{{ webpage_origin_url }}"
-          ViewCounterEndpoint="{{ view_counter_api_endpoint }}"
+          HostedZoneId="{{ hosted_zone_id }}"
+          CertificateArn="{{ certificate_arn }}"
+          ViewCounterApiDomain="{{ view_counter_api_endpoint }}"
           ENV="{{ env }}"
         chdir: "{{ aws_folder }}"
       environment:

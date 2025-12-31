@@ -11,13 +11,20 @@ Parameters:
     Description: Name of the Lambda function
   WebPageOrigin:
     Type: String
-    Description: Origin hosting the webpage making calls to ViewCounter endpoint
-  ViewCounterEndpoint:
+    Description: Origin hosting the webpage making calls to ViewCounter endpoint. Used of OAC validation.
+  HostedZoneId:
     Type: String
-    Description: Consumer endpoint for view counter. Used by Frontend.
+    Description: Route 53 Hosted Zone ID
+  CertificateArn:
+    Type: String
+    Description: ARN of the ACM certificate for the custom domain
+  ViewCounterApiDomain:
+    Type: String
+    Description: Custom domain name for the View Counter API
   ENV:
     Type: String
     Description: Staging Environment
+
 
 Globals:
   Function:
@@ -73,6 +80,14 @@ Resources:
     Properties:
       StageName: !Ref ENV
       TracingEnabled: true
+      DisableExecuteApiEndpoint: true
+      MethodSettings:
+        - ResourcePath: "/*"
+          HttpMethod: "*"
+          ThrottlingBurstLimit: 10
+          ThrottlingRateLimit: 5
+      Auth:
+        DefaultAuthorizer: NONE
       Cors:
         AllowOrigin: "'*'"
         AllowMethods: "'GET,POST,OPTIONS'"
@@ -91,10 +106,28 @@ Resources:
               Access-Control-Allow-Methods: "'GET,POST,OPTIONS'"
               Access-Control-Allow-Headers: "'Content-Type,Authorization'"
 
-Outputs:
-  ApiEndpoint:
-    Description: API Gateway endpoint
-    Value: !Sub "https://${ViewCounterApi}.execute-api.${AWS::Region}.amazonaws.com/${ENV}"
-  TableName:
-    Description: DynamoDB table name
-    Value: !Ref ViewCounterTable
+  ViewCounterApiCustomDomain:
+    Type: AWS::ApiGateway::DomainName
+    Properties:
+      DomainName: !Ref ViewCounterApiDomain
+      RegionalCertificateArn: !Ref CertificateArn
+      EndpointConfiguration:
+        Types:
+          - REGIONAL
+
+  ViewCounterApiBasePathMapping:
+    Type: AWS::ApiGateway::BasePathMapping
+    Properties:
+      DomainName: !Ref ViewCounterApiCustomDomain
+      RestApiId: !Ref ViewCounterApi
+      Stage: !Ref ENV
+
+  ViewCounterApiDnsRecord:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneId: !Ref HostedZoneId
+      Name: !Ref ViewCounterApiDomain
+      Type: A
+      AliasTarget:
+        DNSName: !GetAtt ViewCounterApiCustomDomain.RegionalDomainName
+        HostedZoneId: !GetAtt ViewCounterApiCustomDomain.RegionalHostedZoneId
