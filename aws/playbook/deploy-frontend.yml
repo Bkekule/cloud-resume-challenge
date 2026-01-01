@@ -25,7 +25,7 @@
 
     - name: Load vault vars
       ansible.builtin.include_vars:
-        file: "{{ [playbook_dir, 'environment', 'vault.yml'] | path_join }}"
+        file: "{{ [playbook_dir, 'vault', env, 'vault.yml'] | path_join }}"
 
     - name: Assert required vars exist
       ansible.builtin.assert:
