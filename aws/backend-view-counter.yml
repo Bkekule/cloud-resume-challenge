@@ -78,6 +78,7 @@ Resources:
     Type: AWS::Serverless::Api
     Properties:
       StageName: !Ref ENV
+      OpenApiVersion: 3.0.1
       TracingEnabled: true
       DisableExecuteApiEndpoint: true
       MethodSettings:
@@ -116,7 +117,7 @@ Resources:
 
   ViewCounterApiBasePathMapping:
     Type: AWS::ApiGateway::BasePathMapping
-    DependsOn: ViewCounterApi
+    DependsOn: ViewCounterApiStage
     Properties:
       DomainName: !Ref ViewCounterApiCustomDomain
       RestApiId: !Ref ViewCounterApi
