@@ -277,3 +277,157 @@ body[location="resume"] main .container .main aside.sidebar section h2 {
   text-align: right;
   margin: 0;
 }
+
+@page {
+  margin: 0.2in;
+  size: letter portrait;
+}
+
+@media print {
+  header {
+    display: none !important;
+  }
+
+  body {
+    background: white !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  main {
+    margin: 0 !important;
+    margin-top: 0 !important;
+    padding: 0 !important;
+  }
+
+  body[location="resume"] main .container {
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0.02in 0.25in 0.25in !important;
+    box-shadow: none !important;
+    border: none !important;
+    background: white !important;
+    display: block !important;
+    font-size: 9.7pt;
+    line-height: 1.3;
+  }
+
+  /* Minimal header */
+  body[location="resume"] main .container .header {
+    margin: 0 !important;
+    padding: 0 !important;
+    border-bottom: 1px solid #000;
+  }
+
+  body[location="resume"] main .container .header .title-row {
+    margin: 0 !important;
+    padding: 0 0 0.1in !important;
+  }
+
+  body[location="resume"] main .container .header h1 {
+    font-size: 1.3em !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  body[location="resume"] main .container .header .specialization {
+    font-size: 0.9em !important;
+    margin: 0 !important;
+  }
+
+  body[location="resume"] main .container .header .tagline {
+    font-size: 0.8em !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  body[location="resume"] main .container .header button {
+    display: none !important;
+  }
+
+  body[location="resume"] main .container h2 {
+    padding: 0 !important;
+    font-size: 1.3em !important;
+  }
+
+  body[location="resume"] main .container h3 {
+    padding: 0 !important;
+    font-size: 1.2em !important;
+  }
+
+  body[location="resume"] main .container h4 {
+    padding: 0 !important;
+    font-size: 1.1em !important;
+  }
+
+  /* Compact intro */
+  body[location="resume"] main .container .intro {
+    font-size: 1em !important;
+    margin: 0 !important;
+    padding: 0.1in 0 !important;
+    line-height: 1.3;
+    text-align: justify;
+    border-bottom: 1px solid #ccc !important;
+  }
+
+  /* Hide sidebar in print to fit on one page */
+  body[location="resume"] main .container .main aside.sidebar {
+    display: none !important;
+  }
+
+  /* Main content area - single column */
+  body[location="resume"] main .container .main {
+    display: block !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    flex-direction: column;
+  }
+
+  body[location="resume"] main .container .main aside.content {
+    display: block !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  body[location="resume"] main .container .main aside.content section {
+    margin-bottom: 0.03in !important;
+    padding-bottom: 0.02in !important;
+    border-bottom: 1px solid #ccc !important;
+  }
+
+  body[location="resume"]
+    main
+    .container
+    .main
+    aside.content
+    section:last-child {
+    border-bottom: none !important;
+  }
+
+  body[location="resume"] main .container .main aside.content h3 {
+    font-size: 1em !important;
+    margin: 0.02in 0 0 !important;
+    padding: 0 !important;
+    margin-bottom: 0.01in !important;
+    font-weight: 700;
+  }
+
+  body[location="resume"] main .container .main aside.content article {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  body[location="resume"] main .container .main aside.content p {
+    margin: 0 !important;
+    padding: 0 !important;
+    font-size: 1em;
+    line-height: 1.15;
+  }
+
+  body[location="resume"] main .container .main aside.content li {
+    margin: 0 !important;
+    padding: 0 !important;
+    font-size: 1em;
+    line-height: 1.15;
+  }
+}
