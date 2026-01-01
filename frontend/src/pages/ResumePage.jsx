@@ -11,6 +11,8 @@ import { useEffect, useRef, useState } from "react";
 
 export default function ResumePage() {
   const isPhone = useMediaQuery("(max-width: 768px)");
+  const isPrinting = useMediaQuery("print");
+  const effectiveIsPhone = isPhone && !isPrinting;
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const sidebarRef = useRef(null);
   const sidebarButtonRef = useRef(null);
@@ -28,7 +30,7 @@ export default function ResumePage() {
 
   // Handle body overflow when sidebar is open on phone. Useful in this case because of the Layout
   useEffect(() => {
-    if (isPhone && sidebarOpen) {
+    if (effectiveIsPhone && sidebarOpen) {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "";
@@ -36,7 +38,7 @@ export default function ResumePage() {
     return () => {
       document.body.style.overflow = "";
     };
-  }, [isPhone, sidebarOpen]);
+  }, [effectiveIsPhone, sidebarOpen]);
 
   useEffect(() => {
     const onKeyDown = (e) => {
@@ -48,17 +50,17 @@ export default function ResumePage() {
         return;
       }
 
-      if (isPhone && sidebarOpen) {
+      if (effectiveIsPhone && sidebarOpen) {
         setSidebarOpen(false);
       }
     };
 
     document.addEventListener("keydown", onKeyDown);
     return () => document.removeEventListener("keydown", onKeyDown);
-  }, [isPhone, sidebarOpen]);
+  }, [effectiveIsPhone, sidebarOpen]);
 
   useEffect(() => {
-    if (!isPhone) return;
+    if (!effectiveIsPhone) return;
 
     if (trap.current) {
       trap.current.deactivate();
@@ -86,7 +88,7 @@ export default function ResumePage() {
         trap.current = null;
       }
     };
-  }, [isPhone, sidebarOpen]);
+  }, [effectiveIsPhone, sidebarOpen]);
 
   useEffect(() => {
     if (!isPhone && sidebarOpen) {
@@ -101,7 +103,7 @@ export default function ResumePage() {
   const sidebarID = "resume-sidebar";
 
   // Phone view with sidebar open - show only sidebar with close button
-  if (isPhone && sidebarOpen) {
+  if (effectiveIsPhone && sidebarOpen) {
     return (
       <div className="container">
         <div className="main sidebar-open">
@@ -135,21 +137,19 @@ export default function ResumePage() {
         sidebarOpen={sidebarOpen}
         sidebarButtonRef={sidebarButtonRef}
         sidebarID={sidebarID}
-        showSidebarButton={isPhone}
+        showSidebarButton={effectiveIsPhone}
       />
       <Intro {...resumeData} />
       <div className="main">
-        {!isPhone && (
-          <aside
-            className="sidebar"
-            id={sidebarID}
-            aria-hidden={false}
-            tabIndex="-1"
-            ref={sidebarRef}
-          >
-            <SideBar {...resumeData.sidebar} />
-          </aside>
-        )}
+        <aside
+          className="sidebar"
+          id={sidebarID}
+          aria-hidden={effectiveIsPhone}
+          tabIndex="-1"
+          ref={sidebarRef}
+        >
+          <SideBar {...resumeData.sidebar} />
+        </aside>
         <aside className="content">
           <Content {...resumeData} />
         </aside>
